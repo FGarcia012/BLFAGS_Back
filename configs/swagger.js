@@ -20,7 +20,7 @@ const option = {
         ],
     },
     apis: [
-
+        './src/auth/auth.routes.js'
     ]
 };
 
