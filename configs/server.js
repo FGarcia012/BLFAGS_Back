@@ -8,6 +8,7 @@ import { dbConnection } from './mongo.js';
 import authRoutes from '../src/auth/auth.routes.js';
 import userRoutes from '../src/user/user.routes.js';
 import hashtagRoutes from '../src/hashtag/hashtag.routes.js';
+import commentRoutes from '../src/comment/comment.routes.js';
 import apiLimiter from '../src/middlewares/rate-limit-validator.js';
 import { swaggerDocs, swaggerUi } from './swagger.js';
 
@@ -25,6 +26,7 @@ const routes = (app) => {
     app.use('/BLFAGS/v1/auth', authRoutes);
     app.use('/BLFAGS/v1/user', userRoutes);
     app.use('/BLFAGS/v1/hashtag', hashtagRoutes);
+    app.use('/BLFAGS/v1/comment', commentRoutes);
 };
 
 const conectarDB = async () => {
