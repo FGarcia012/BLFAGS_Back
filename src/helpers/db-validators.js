@@ -1,4 +1,5 @@
 import User from '../user/user.model.js';
+import Hashtag from '../hashtag/hashtag.model.js';
 
 export const emailExists = async (email = '') => {
     const exists = await User.findOne({ email });
@@ -19,4 +20,11 @@ export const userExists = async (uid = ' ') => {
     if(!existe){
         throw new Error("No existe el usuario con el ID proporcionado")
     }
-}
+};
+
+export const hashtagExists = async (hid = ' ') => {
+    const existe = await Hashtag.findById(hid)
+    if(!existe){
+        throw new Error("No existe el hashtag con el ID proporcionado")
+    }
+};
