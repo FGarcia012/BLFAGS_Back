@@ -1,0 +1,362 @@
+{
+	"info": {
+		"_postman_id": "d271fb62-8284-4406-8f66-586c3889dc4b",
+		"name": "BLFAGS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37658894"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Fredy Alexander García Sicajau",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "FAGS",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "alexander.garcia.sicajau@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Dev&Life#42_JS",
+									"type": "text"
+								},
+								{
+									"key": "profilePicture",
+									"type": "file",
+									"src": "/C:/Users/alexa/OneDrive/Escritorio/Personal/astronauta.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"alexander.garcia.sicajau@gmail.com\",\r\n    \"password\": \"Dev&Life#42_JS\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updatePassword",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODlmZjljN2IxNDVjOWRkYjRlMDVkMjgiLCJpYXQiOjE3NTUzMjExMDUsImV4cCI6MTc1NTMyNDcwNX0.0vGWrrkmdr_AgU5mAJD0oXYlZKlw8TI_JVjI6Odkm3s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"currentPassword\": \"EYQ/MSm5.!8MaCc\",\r\n  \"newPassword\": \"Dev&Life#42_JS\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/user/updatePassword/689ff9c7b145c9ddb4e05d28",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"user",
+								"updatePassword",
+								"689ff9c7b145c9ddb4e05d28"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODlmZjljN2IxNDVjOWRkYjRlMDVkMjgiLCJpYXQiOjE3NTUzMjExODQsImV4cCI6MTc1NTMyNDc4NH0.cLqJboX26y-wi5SUOnjoltrtX83aXn9d4dP0l3irug4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Fredy Alexander García Sicajau\",\r\n  \"username\": \"FAGS\",\r\n  \"email\": \"alexander.garcia.sicajau@gmail.com\"\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/user/updateUser/689ff9c7b145c9ddb4e05d28",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"user",
+								"updateUser",
+								"689ff9c7b145c9ddb4e05d28"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateProfilePicture",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODlmZjljN2IxNDVjOWRkYjRlMDVkMjgiLCJpYXQiOjE3NTUzMjE1MjMsImV4cCI6MTc1NTMyNTEyM30.WKvtzZlTAV6-e3DLPxaWJtyXb25VRVaJ0LsEmZ_Cqbg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "profilePicture",
+									"type": "file",
+									"src": "/C:/Users/alexa/OneDrive/Escritorio/Personal/astronauta.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/user/updateProfilePicture/689ff9c7b145c9ddb4e05d28",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"user",
+								"updateProfilePicture",
+								"689ff9c7b145c9ddb4e05d28"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODlmZjljN2IxNDVjOWRkYjRlMDVkMjgiLCJpYXQiOjE3NTUzMjIyNDEsImV4cCI6MTc1NTMyNTg0MX0.Uhlwor_BPB7a7lan5pe3he5LW-ggqNgMF2BH5qQ0w1k",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"confirm\": \"Si\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/user/deleteUser/689ff9c7b145c9ddb4e05d28",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"user",
+								"deleteUser",
+								"689ff9c7b145c9ddb4e05d28"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUser",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODlmZjljN2IxNDVjOWRkYjRlMDVkMjgiLCJpYXQiOjE3NTUzMjIyNDEsImV4cCI6MTc1NTMyNTg0MX0.Uhlwor_BPB7a7lan5pe3he5LW-ggqNgMF2BH5qQ0w1k",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/user/getUser/689ff9c7b145c9ddb4e05d28",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"user",
+								"getUser",
+								"689ff9c7b145c9ddb4e05d28"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUsers",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODlmZjljN2IxNDVjOWRkYjRlMDVkMjgiLCJpYXQiOjE3NTUzMjI3ODIsImV4cCI6MTc1NTMyNjM4Mn0.z7gAgZtH7hLXKf36V5ssg54RXBTmhX1eD-abSY1gAGw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/user/getUsers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"user",
+								"getUsers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
