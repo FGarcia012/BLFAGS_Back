@@ -72,7 +72,7 @@ export const updateUser = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: 'Usuario actualizado exitosamente',
-            data: user
+            user
         });
     }catch(err) {
         return res.status(500).json({
@@ -132,7 +132,7 @@ export const deleteUser = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: 'Usuario eliminado exitosamente',
-            data: user
+            user
         });
     }catch(err){
         return res.status(500).json({
@@ -157,7 +157,7 @@ export const getUsers = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: 'Usuarios obtenidos exitosamente',
-            data: users
+            users
         });
     }catch(err){
         return res.status(500).json({
@@ -184,7 +184,7 @@ export const getUser = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: 'Usuario obtenido exitosamente',
-            data: user
+            user
         });
     }catch(err){
         return res.status(500).json({
