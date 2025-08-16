@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
 import { dbConnection } from './mongo.js';
+import authRoutes from '../src/auth/auth.routes.js';
 import apiLimiter from '../src/middlewares/rate-limit-validator.js';
 import { swaggerDocs, swaggerUi } from './swagger.js';
 
@@ -19,6 +20,7 @@ const middlewares = (app) => {
 
 const routes = (app) => {
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+    app.use('/BLFAGS/v1/auth', authRoutes);
 };
 
 const conectarDB = async () => {
