@@ -34,3 +34,4 @@ const createMulterConfig = (destinationFolder, allowedMimeTypes = IMAGE_MIMETYPE
 
 export const uploadProfilePicture = createMulterConfig('../../public/uploads/profile-picture');
 export const uploadComments = createMulterConfig('../../public/uploads/comments', COMMENT_MIMETYPES);
+export const uploadPublications = createMulterConfig('../../public/uploads/publications', COMMENT_MIMETYPES);

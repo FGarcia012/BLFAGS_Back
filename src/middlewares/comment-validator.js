@@ -1,5 +1,5 @@
 import { body, param } from 'express-validator';
-import { commentExists, userExists } from '../helpers/db-validators.js';
+import { commentExists, userExists, publicationExists } from '../helpers/db-validators.js';
 import { validateField } from './validate-field.js';
 import { deleteFileOnError } from './delete-file-on-error.js';
 import { handleErrors } from './handle-erros.js';
@@ -9,8 +9,9 @@ import { hasRoles } from './validate-roles.js';
 export const addCommentValidator = [
     validateJWT,
     hasRoles('ADMIN', 'USER'),
-    body('post').notEmpty().withMessage('El ID del post es obligatorio'),
-    body('post').isMongoId().withMessage('El ID del post debe ser un ObjectId válido'),
+    body('publication').notEmpty().withMessage('El ID de la publicación es obligatorio'),
+    body('publication').isMongoId().withMessage('El ID de la publicación debe ser un ObjectId válido'),
+    body('publication').custom(publicationExists),
     body('user').notEmpty().withMessage('El ID del usuario es obligatorio'),
     body('user').isMongoId().withMessage('El ID del usuario debe ser un ObjectId válido'),
     body('user').custom(userExists),
@@ -37,8 +38,9 @@ export const getCommentValidator = [
     handleErrors
 ];
 
-export const getCommentsByPostValidator = [
-    param('postId').isMongoId().withMessage('El ID del post debe ser un ObjectId válido'),
+export const getCommentsByPublicationValidator = [
+    param('pid').isMongoId().withMessage('El ID de la publicación debe ser un ObjectId válido'),
+    param('pid').custom(publicationExists),
     validateField,
     handleErrors
 ];

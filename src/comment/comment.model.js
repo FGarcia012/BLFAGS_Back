@@ -14,10 +14,10 @@ const commentSchema = Schema({
         ref: 'User',
         required: [true, 'El usuario es obligatorio']
     },
-    post: {
+    publication: {
         type: Schema.Types.ObjectId,
-        ref: 'Post',
-        required: [true, 'El post es obligatorio']
+        ref: 'Publication',
+        required: [true, 'La publicación es obligatoria']
     },
     status: {
         type: Boolean,

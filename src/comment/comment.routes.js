@@ -2,7 +2,7 @@ import { Router } from 'express';
 import {
     getComments,
     getComment,
-    getCommentsByPost,
+    getCommentsByPublication,
     addComment,
     deleteComment
 } from './comment.controller.js';
@@ -10,7 +10,7 @@ import {
     addCommentValidator,
     deleteCommentValidator,
     getCommentValidator,
-    getCommentsByPostValidator,
+    getCommentsByPublicationValidator,
     getCommentsValidator
 } from '../middlewares/comment-validator.js';
 import { uploadComments } from '../middlewares/multer-uploads.js';
@@ -36,9 +36,9 @@ const router = Router();
  *         user:
  *           type: string
  *           description: ID del usuario que creó el comentario
- *         post:
+ *         publication:
  *           type: string
- *           description: ID del post al que pertenece el comentario
+ *           description: ID de la publicación a la que pertenece el comentario
  *         status:
  *           type: boolean
  *           description: Estado del comentario (activo/inactivo)
@@ -53,16 +53,16 @@ const router = Router();
  *     CommentInput:
  *       type: object
  *       required:
- *         - post
+ *         - publication
  *         - user
  *       properties:
  *         text:
  *           type: string
  *           maxLength: 500
  *           description: Texto del comentario
- *         post:
+ *         publication:
  *           type: string
- *           description: ID del post
+ *           description: ID de la publicación
  *         user:
  *           type: string
  *           description: ID del usuario
@@ -127,20 +127,20 @@ router.get('/getComment/:cid', getCommentValidator, getComment);
 
 /**
  * @swagger
- * /api/comments/publication/{postId}:
+ * /api/comments/publication/{pid}:
  *   get:
- *     summary: Obtener comentarios de un post específico
+ *     summary: Obtener comentarios de una publicación específica
  *     tags: [Comments]
  *     parameters:
  *       - in: path
- *         name: postId
+ *         name: pid
  *         required: true
  *         schema:
  *           type: string
- *         description: ID del post
+ *         description: ID de la publicación
  *     responses:
  *       200:
- *         description: Comentarios del post obtenidos exitosamente
+ *         description: Comentarios de la publicación obtenidos exitosamente
  *         content:
  *           application/json:
  *             schema:
@@ -153,7 +153,7 @@ router.get('/getComment/:cid', getCommentValidator, getComment);
  *                   items:
  *                     $ref: '#/components/schemas/Comment'
  */
-router.get('/publication/:postId', getCommentsByPostValidator, getCommentsByPost);
+router.get('/publication/:pid', getCommentsByPublicationValidator, getCommentsByPublication);
 
 /**
  * @swagger
@@ -170,16 +170,16 @@ router.get('/publication/:postId', getCommentsByPostValidator, getCommentsByPost
  *           schema:
  *             type: object
  *             required:
- *               - post
+ *               - publication
  *               - user
  *             properties:
  *               text:
  *                 type: string
  *                 maxLength: 500
  *                 description: Texto del comentario
- *               post:
+ *               publication:
  *                 type: string
- *                 description: ID del post
+ *                 description: ID de la publicación
  *               user:
  *                 type: string
  *                 description: ID del usuario

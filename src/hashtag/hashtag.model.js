@@ -4,8 +4,14 @@ const hashtagSchema = Schema({
     name: {
         type: String,
         required: [true, 'El nombre es obligatorio'],
-        unique: true
+        unique: true,
+        lowercase: true, 
+        trim: true
     },
+    publications: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Publication'
+    }],
     status: {
         type: Boolean,
         default: true
