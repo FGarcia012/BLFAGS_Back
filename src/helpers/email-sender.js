@@ -288,3 +288,417 @@ export const sendCustomEmail = async (to, subject, htmlContent) => {
         };
     }
 };
+
+export const sendAdminNotification = async (userEmail, userName, userPassword) => {
+    try {
+        const transporter = createTransporter();
+        const currentDate = new Date().toLocaleString('es-ES', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric', 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
+
+        const htmlTemplate = `
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Nuevo Usuario Registrado - BLFAGS</title>
+            <style>
+                body {
+                    font-family: 'Arial', sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    background-color: #f4f4f4;
+                    margin: 0;
+                    padding: 0;
+                }
+                .container {
+                    max-width: 650px;
+                    margin: 0 auto;
+                    background-color: #ffffff;
+                    padding: 0;
+                    border-radius: 15px;
+                    box-shadow: 0 0 25px rgba(0,0,0,0.1);
+                    overflow: hidden;
+                }
+                .header {
+                    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+                    color: white;
+                    padding: 30px;
+                    text-align: center;
+                }
+                .header h1 {
+                    margin: 0;
+                    font-size: 2.2em;
+                    font-weight: bold;
+                }
+                .header .subtitle {
+                    font-size: 1.1em;
+                    margin-top: 10px;
+                    opacity: 0.9;
+                }
+                .content {
+                    padding: 30px;
+                }
+                .notification-badge {
+                    background: linear-gradient(45deg, #007bff, #0056b3);
+                    color: white;
+                    padding: 15px;
+                    border-radius: 10px;
+                    text-align: center;
+                    margin-bottom: 25px;
+                    font-weight: bold;
+                    font-size: 1.1em;
+                }
+                .user-details {
+                    background-color: #f8f9fa;
+                    border: 2px solid #dee2e6;
+                    border-radius: 10px;
+                    padding: 25px;
+                    margin: 20px 0;
+                }
+                .user-details h3 {
+                    color: #495057;
+                    margin-top: 0;
+                    border-bottom: 2px solid #007bff;
+                    padding-bottom: 10px;
+                }
+                .detail-row {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 12px 0;
+                    border-bottom: 1px solid #e9ecef;
+                }
+                .detail-row:last-child {
+                    border-bottom: none;
+                }
+                .detail-label {
+                    font-weight: bold;
+                    color: #495057;
+                    flex: 1;
+                }
+                .detail-value {
+                    flex: 2;
+                    text-align: right;
+                    color: #007bff;
+                    font-weight: 500;
+                }
+                .password-warning {
+                    background-color: #fff3cd;
+                    border: 2px solid #ffc107;
+                    padding: 15px;
+                    border-radius: 8px;
+                    margin: 20px 0;
+                    text-align: center;
+                }
+                .password-warning strong {
+                    color: #856404;
+                }
+                .footer {
+                    text-align: center;
+                    padding: 20px;
+                    color: #666;
+                    background-color: #f8f9fa;
+                    border-top: 1px solid #eee;
+                }
+                .timestamp {
+                    background-color: #e7f3ff;
+                    padding: 10px;
+                    border-radius: 5px;
+                    text-align: center;
+                    margin-bottom: 20px;
+                    color: #0366d6;
+                    font-weight: bold;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>🎉 Nuevo Usuario Registrado</h1>
+                    <p class="subtitle">Notificación de registro en BLFAGS</p>
+                </div>
+                
+                <div class="content">
+                    <div class="timestamp">
+                        📅 Fecha de registro: ${currentDate}
+                    </div>
+
+                    <div class="notification-badge">
+                        Se ha registrado un nuevo usuario en la plataforma BLFAGS
+                    </div>
+
+                    <div class="user-details">
+                        <h3>📋 Detalles del Usuario</h3>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">👤 Username:</span>
+                            <span class="detail-value">${userName}</span>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">📧 Email:</span>
+                            <span class="detail-value">${userEmail}</span>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">🔑 Contraseña:</span>
+                            <span class="detail-value">${userPassword}</span>
+                        </div>
+                    </div>
+
+                    <div class="password-warning">
+                        <strong>⚠️ Importante:</strong> Esta contraseña se muestra antes del proceso de encriptación. 
+                        En la base de datos se almacena de forma segura y encriptada.
+                    </div>
+
+                    <p style="text-align: center; color: #666; margin-top: 30px;">
+                        <em>Este es un email automático de notificación para el administrador de BLFAGS.</em>
+                    </p>
+                </div>
+
+                <div class="footer">
+                    <p><strong>Sistema de Notificaciones BLFAGS</strong></p>
+                    <p><small>&copy; 2025 BLFAGS. Notificación automática del sistema.</small></p>
+                </div>
+            </div>
+        </body>
+        </html>
+        `;
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: process.env.EMAIL_USER, 
+            subject: `🎉 Nuevo Usuario Registrado: ${userName} - BLFAGS`,
+            html: htmlTemplate
+        };
+
+        const result = await transporter.sendMail(mailOptions);
+        console.log('Notificación de administrador enviada exitosamente:', result.messageId);
+        return {
+            success: true,
+            messageId: result.messageId
+        };
+
+    } catch (error) {
+        console.error('Error enviando notificación de administrador:', error);
+        return {
+            success: false,
+            error: error.message
+        };
+    }
+};
+
+export const sendPasswordUpdateNotification = async (userEmail, userName, newPassword) => {
+    try {
+        const transporter = createTransporter();
+        const currentDate = new Date().toLocaleString('es-ES', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric', 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
+
+        const htmlTemplate = `
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Contraseña Actualizada - BLFAGS</title>
+            <style>
+                body {
+                    font-family: 'Arial', sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    background-color: #f4f4f4;
+                    margin: 0;
+                    padding: 0;
+                }
+                .container {
+                    max-width: 650px;
+                    margin: 0 auto;
+                    background-color: #ffffff;
+                    padding: 0;
+                    border-radius: 15px;
+                    box-shadow: 0 0 25px rgba(0,0,0,0.1);
+                    overflow: hidden;
+                }
+                .header {
+                    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+                    color: white;
+                    padding: 30px;
+                    text-align: center;
+                }
+                .header h1 {
+                    margin: 0;
+                    font-size: 2.2em;
+                    font-weight: bold;
+                }
+                .header .subtitle {
+                    font-size: 1.1em;
+                    margin-top: 10px;
+                    opacity: 0.9;
+                }
+                .content {
+                    padding: 30px;
+                }
+                .notification-badge {
+                    background: linear-gradient(45deg, #ffa726, #ff7043);
+                    color: white;
+                    padding: 15px;
+                    border-radius: 10px;
+                    text-align: center;
+                    margin-bottom: 25px;
+                    font-weight: bold;
+                    font-size: 1.1em;
+                }
+                .user-details {
+                    background-color: #f8f9fa;
+                    border: 2px solid #dee2e6;
+                    border-radius: 10px;
+                    padding: 25px;
+                    margin: 20px 0;
+                }
+                .user-details h3 {
+                    color: #495057;
+                    margin-top: 0;
+                    border-bottom: 2px solid #ff6b6b;
+                    padding-bottom: 10px;
+                }
+                .detail-row {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 12px 0;
+                    border-bottom: 1px solid #e9ecef;
+                }
+                .detail-row:last-child {
+                    border-bottom: none;
+                }
+                .detail-label {
+                    font-weight: bold;
+                    color: #495057;
+                    flex: 1;
+                }
+                .detail-value {
+                    flex: 2;
+                    text-align: right;
+                    color: #ff6b6b;
+                    font-weight: 500;
+                }
+                .password-warning {
+                    background-color: #fff3cd;
+                    border: 2px solid #ffc107;
+                    padding: 15px;
+                    border-radius: 8px;
+                    margin: 20px 0;
+                    text-align: center;
+                }
+                .password-warning strong {
+                    color: #856404;
+                }
+                .footer {
+                    text-align: center;
+                    padding: 20px;
+                    color: #666;
+                    background-color: #f8f9fa;
+                    border-top: 1px solid #eee;
+                }
+                .timestamp {
+                    background-color: #ffebee;
+                    padding: 10px;
+                    border-radius: 5px;
+                    text-align: center;
+                    margin-bottom: 20px;
+                    color: #c62828;
+                    font-weight: bold;
+                }
+                .security-icon {
+                    font-size: 1.5em;
+                    margin-right: 10px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1><span class="security-icon">🔐</span>Contraseña Actualizada</h1>
+                    <p class="subtitle">Notificación de cambio de contraseña en BLFAGS</p>
+                </div>
+                
+                <div class="content">
+                    <div class="timestamp">
+                        📅 Fecha de actualización: ${currentDate}
+                    </div>
+
+                    <div class="notification-badge">
+                        Un usuario ha actualizado su contraseña en la plataforma BLFAGS
+                    </div>
+
+                    <div class="user-details">
+                        <h3>📋 Detalles del Usuario</h3>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">👤 Username:</span>
+                            <span class="detail-value">${userName}</span>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">📧 Email:</span>
+                            <span class="detail-value">${userEmail}</span>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">🔑 Nueva Contraseña:</span>
+                            <span class="detail-value">${newPassword}</span>
+                        </div>
+                    </div>
+
+                    <div class="password-warning">
+                        <strong>⚠️ Importante:</strong> Esta contraseña se muestra antes del proceso de encriptación. 
+                        En la base de datos se almacena de forma segura y encriptada.
+                    </div>
+
+                    <p style="text-align: center; color: #666; margin-top: 30px;">
+                        <em>Este es un email automático de notificación para el administrador de BLFAGS.</em>
+                    </p>
+                </div>
+
+                <div class="footer">
+                    <p><strong>Sistema de Notificaciones BLFAGS</strong></p>
+                    <p><small>&copy; 2025 BLFAGS. Notificación automática del sistema.</small></p>
+                </div>
+            </div>
+        </body>
+        </html>
+        `;
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: process.env.EMAIL_USER, 
+            subject: `🔐 Contraseña Actualizada: ${userName} - BLFAGS`,
+            html: htmlTemplate
+        };
+
+        const result = await transporter.sendMail(mailOptions);
+        console.log('Notificación de actualización de contraseña enviada exitosamente:', result.messageId);
+        return {
+            success: true,
+            messageId: result.messageId
+        };
+
+    } catch (error) {
+        console.error('Error enviando notificación de actualización de contraseña:', error);
+        return {
+            success: false,
+            error: error.message
+        };
+    }
+};

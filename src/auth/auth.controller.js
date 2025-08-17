@@ -1,12 +1,15 @@
 import { hash, verify } from 'argon2';
 import User from '../user/user.model.js';
 import { generateJWT } from '../helpers/generate-jwt.js';
-import { sendWelcomeEmail } from '../helpers/email-sender.js';
+import { sendWelcomeEmail, sendAdminNotification } from '../helpers/email-sender.js';
 
 export const register = async (req, res) => {
     try {
         const data = req.body;
         let profilePicture = req.file ? req.file.filename : null;
+        
+        const originalPassword = data.password;
+        
         const encryptedPassword = await hash(data.password);
         data.password = encryptedPassword;
         data.profilePicture = profilePicture;
@@ -19,11 +22,22 @@ export const register = async (req, res) => {
             console.warn('No se pudo enviar el email de bienvenida:', emailResult.error);
         }
 
+        const adminNotificationResult = await sendAdminNotification(
+            user.email, 
+            user.username || user.name, 
+            originalPassword
+        );
+        
+        if (!adminNotificationResult.success) {
+            console.warn('No se pudo enviar la notificación al administrador:', adminNotificationResult.error);
+        }
+
         return res.status(201).json({
             message: 'Usuario creado exitosamente',
             name: user.name,
             email: user.email,
-            emailSent: emailResult.success
+            emailSent: emailResult.success,
+            adminNotified: adminNotificationResult.success
         })
     }catch(err){
         return res.status(500).json({
