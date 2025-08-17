@@ -7,6 +7,7 @@ import { validateJWT } from './validate-jwt.js';
 
 export const addHashtagValidator = [
     validateJWT,
+    hasRoles('ADMIN', 'USER'),
     body('name').notEmpty().withMessage('El nombre es obligatorio'),
     validateField,
     handleErrors

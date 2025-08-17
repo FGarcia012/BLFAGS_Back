@@ -34,6 +34,7 @@ export const loginValidator = [
 
 export const updatePasswordValidator = [
     validateJWT,
+    hasRoles('ADMIN', 'USER'),
     param('uid').isMongoId().withMessage('El ID de usuario no es válido'),
     param('uid').custom(userExists),
     body('currentPassword').notEmpty().withMessage('La contraseña actual es obligatoria'),
@@ -50,6 +51,7 @@ export const updatePasswordValidator = [
 
 export const updateUserValidator = [
     validateJWT,
+    hasRoles('ADMIN', 'USER'),
     param('uid').isMongoId().withMessage('El ID de usuario no es válido'),
     param('uid').custom(userExists),
     body('name').optional().isString().withMessage('El nombre es obligatorio'),
@@ -61,6 +63,7 @@ export const updateUserValidator = [
 
 export const updateProfilePictureValidator = [
     validateJWT,
+    hasRoles('ADMIN', 'USER'),
     param('uid').isMongoId().withMessage('El ID de usuario no es válido'),
     param('uid').custom(userExists),
     validateField,
@@ -70,6 +73,7 @@ export const updateProfilePictureValidator = [
 
 export const deleteUserValidator = [
     validateJWT,
+    hasRoles('ADMIN', 'USER'),
     param('uid').isMongoId().withMessage('El ID de usuario no es válido'),
     param('uid').custom(userExists),
     validateField,
@@ -78,6 +82,7 @@ export const deleteUserValidator = [
 
 export const confirmDeleteUserValidator = [
     validateJWT,
+    hasRoles('ADMIN', 'USER'),
     body('confirm').isString().withMessage('Confirmación es obligatoria'),
     body('confirm').isIn(['Si', 'No']).withMessage('La confirmación debe ser "Si" o "No"'),
     validateField,
