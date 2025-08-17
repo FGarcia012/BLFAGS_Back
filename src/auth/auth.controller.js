@@ -1,6 +1,7 @@
 import { hash, verify } from 'argon2';
 import User from '../user/user.model.js';
 import { generateJWT } from '../helpers/generate-jwt.js';
+import { sendWelcomeEmail } from '../helpers/email-sender.js';
 
 export const register = async (req, res) => {
     try {
@@ -12,10 +13,17 @@ export const register = async (req, res) => {
 
         const user = await User.create(data);
 
+        const emailResult = await sendWelcomeEmail(user.email, user.name);
+        
+        if (!emailResult.success) {
+            console.warn('No se pudo enviar el email de bienvenida:', emailResult.error);
+        }
+
         return res.status(201).json({
             message: 'Usuario creado exitosamente',
             name: user.name,
-            email: user.email
+            email: user.email,
+            emailSent: emailResult.success
         })
     }catch(err){
         return res.status(500).json({
