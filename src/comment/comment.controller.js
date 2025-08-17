@@ -89,7 +89,7 @@ export const getCommentsByPublication = async (req, res) => {
 export const addComment = async (req, res) => {
     try {
         const data = req.body;
-        let media = req.file ? req.file.filename : null;
+        let media = req.file ? req.file.path : null;
         data.media = media;
 
         const comment = await Comment.create(data);

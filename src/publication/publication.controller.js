@@ -177,7 +177,7 @@ export const getPublication = async (req, res) => {
 };export const addPublication = async (req, res) => {
     try {
         const data = req.body;
-        let media = req.file ? req.file.filename : null;
+        let media = req.file ? req.file.path : null;
         data.media = media;
 
         if (data.visibility && !['public', 'private'].includes(data.visibility)) {
@@ -218,7 +218,7 @@ export const updatePublication = async (req, res) => {
         const data = req.body;
         
         if(req.file) {
-            data.media = req.file.filename;
+            data.media = req.file.path;
         }
 
         const currentPublication = await Publication.findById(pid);

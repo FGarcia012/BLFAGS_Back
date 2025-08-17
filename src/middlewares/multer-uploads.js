@@ -1,37 +1,99 @@
 import multer from 'multer';
-import { dirname, extname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import cloudinary from 'cloudinary';
+import { extname } from 'path';
 
-const CURRENT_DIR = dirname(fileURLToPath(import.meta.url));
-const IMAGE_MIMETYPES = ["image/png", "image/jpg", "image/jpeg", "image/gif"];
-const VIDEO_MIMETYPES = ["video/mp4", "video/avi", "video/mov", "video/wmv"];
-const COMMENT_MIMETYPES = [...IMAGE_MIMETYPES, ...VIDEO_MIMETYPES];
-const MAX_SIZE = 100000000;
-
-const createMulterConfig = (destinationFolder, allowedMimeTypes = IMAGE_MIMETYPES) => {
-    return multer({
-        storage: multer.diskStorage({
-            destination: (req, file, cb) => {
-                const fullPath = join(CURRENT_DIR, destinationFolder);
-                req.filePath = fullPath;
-                cb(null, fullPath);
-            },
-            filename: (req, file, cb) => {
-                const fileExtension = extname(file.originalname);
-                const fileName = file.originalname.split(fileExtension)[0];
-                cb(null, `${fileName}-${Date.now()}${fileExtension}`);
-            }
-        }),
-        fileFilter: (req, file, cb) => {
-            if (allowedMimeTypes.includes(file.mimetype)) cb(null, true);
-            else cb(new Error(`Solamente se aceptan archivos de los siguientes tipos: ${allowedMimeTypes.join(" ")}`));
-        },
-        limits: {
-            fileSize: MAX_SIZE
-        }
-    });
+export const configureCloudinary = () => {
+  cloudinary.v2.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+  console.log('Cloudinary configurado correctamente');
 };
 
-export const uploadProfilePicture = createMulterConfig('../../public/uploads/profile-picture');
-export const uploadComments = createMulterConfig('../../public/uploads/comments', COMMENT_MIMETYPES);
-export const uploadPublications = createMulterConfig('../../public/uploads/publications', COMMENT_MIMETYPES);
+const profileImageStorage = new CloudinaryStorage({
+  cloudinary: cloudinary.v2,
+  params: {
+    folder: "BLFAGS/profile-pictures",
+    public_id: (req, file) => {
+      const fileExtension = extname(file.originalname);
+      const fileName = file.originalname.split(fileExtension)[0];
+      return `${fileName}-${Date.now()}`;
+    },
+    allowed_formats: ["jpg", "png", "jpeg", "gif", "webp"],
+  },
+});
+
+const publicationsStorage = new CloudinaryStorage({
+  cloudinary: cloudinary.v2,
+  params: {
+    folder: "BLFAGS/publications",
+    public_id: (req, file) => {
+      const fileExtension = extname(file.originalname);
+      const fileName = file.originalname.split(fileExtension)[0];
+      return `${fileName}-${Date.now()}`;
+    },
+    resource_type: "auto", 
+    allowed_formats: ["jpg", "png", "jpeg", "gif", "webp", "mp4", "avi", "mov", "wmv"],
+  },
+});
+
+const commentsStorage = new CloudinaryStorage({
+  cloudinary: cloudinary.v2,
+  params: {
+    folder: "BLFAGS/comments",
+    public_id: (req, file) => {
+      const fileExtension = extname(file.originalname);
+      const fileName = file.originalname.split(fileExtension)[0];
+      return `${fileName}-${Date.now()}`;
+    },
+    resource_type: "auto",
+    allowed_formats: ["jpg", "png", "jpeg", "gif", "webp", "mp4", "avi", "mov", "wmv"],
+  },
+});
+
+const profileImageFilter = (req, file, cb) => {
+  const allowedTypes = ["image/png", "image/jpg", "image/jpeg", "image/gif", "image/webp"];
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Solamente se aceptan archivos de imagen para el perfil"));
+  }
+};
+
+const mediaFilter = (req, file, cb) => {
+  const allowedTypes = [
+    "image/png", "image/jpg", "image/jpeg", "image/gif", "image/webp",
+    "video/mp4", "video/avi", "video/mov", "video/wmv"
+  ];
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Solamente se aceptan archivos de imagen y video"));
+  }
+};
+
+export const uploadProfilePicture = multer({
+  storage: profileImageStorage,
+  fileFilter: profileImageFilter,
+  limits: {
+    fileSize: 10000000, 
+  },
+});
+
+export const uploadPublications = multer({
+  storage: publicationsStorage,
+  fileFilter: mediaFilter,
+  limits: {
+    fileSize: 100000000, 
+  },
+});
+
+export const uploadComments = multer({
+  storage: commentsStorage,
+  fileFilter: mediaFilter,
+  limits: {
+    fileSize: 100000000, 
+  },
+});

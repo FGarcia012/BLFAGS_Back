@@ -13,6 +13,7 @@ import publicationRoutes from '../src/publication/publication.routes.js';
 import reactionRoutes from '../src/reaction/reaction.routes.js';
 import apiLimiter from '../src/middlewares/rate-limit-validator.js';
 import { swaggerDocs, swaggerUi } from './swagger.js';
+import { configureCloudinary } from '../src/middlewares/multer-uploads.js';
 
 const middlewares = (app) => {
     app.use(express.urlencoded({ extended: false }));
@@ -45,6 +46,7 @@ const conectarDB = async () => {
 export const initServer = async () => {
     const app = express()
     try{
+        configureCloudinary();
         middlewares(app)
         conectarDB()
         routes(app)

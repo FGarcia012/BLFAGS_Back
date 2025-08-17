@@ -1,11 +1,6 @@
 import { hash, verify } from 'argon2';
 import User from './user.model.js';
-import fs from 'fs/promises';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { sendPasswordUpdateNotification } from '../helpers/email-sender.js';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export const updatePassword = async (req, res) => {
     try {
@@ -103,7 +98,7 @@ export const updateUser = async (req, res) => {
 export const updateProfilePicture = async (req, res) =>{
     try{
         const {uid} = req.params
-        let newProfilePicture = req.file ? req.file.filename : null
+        let newProfilePicture = req.file ? req.file.path : null
 
         const user = await User.findById(uid)
         if(!newProfilePicture){
@@ -112,10 +107,7 @@ export const updateProfilePicture = async (req, res) =>{
                 message: 'No se proporciono ningun archivo'
             });
         }
-        if(user.profilePicture){
-            const oldProfilePicture = join(__dirname, '../../public/uploads/profile-picture', user.profilePicture)
-            await fs.unlink(oldProfilePicture)
-        }
+        
         user.profilePicture = newProfilePicture
         await user.save()
 
