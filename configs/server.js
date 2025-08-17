@@ -10,6 +10,7 @@ import userRoutes from '../src/user/user.routes.js';
 import hashtagRoutes from '../src/hashtag/hashtag.routes.js';
 import commentRoutes from '../src/comment/comment.routes.js';
 import publicationRoutes from '../src/publication/publication.routes.js';
+import reactionRoutes from '../src/reaction/reaction.routes.js';
 import apiLimiter from '../src/middlewares/rate-limit-validator.js';
 import { swaggerDocs, swaggerUi } from './swagger.js';
 
@@ -29,6 +30,7 @@ const routes = (app) => {
     app.use('/BLFAGS/v1/hashtag', hashtagRoutes);
     app.use('/BLFAGS/v1/comment', commentRoutes);
     app.use('/BLFAGS/v1/publication', publicationRoutes);
+    app.use('/BLFAGS/v1/reactions', reactionRoutes);
 };
 
 const conectarDB = async () => {

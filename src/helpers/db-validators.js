@@ -44,3 +44,10 @@ export const publicationExists = async (pid = ' ') => {
         throw new Error("No existe la publicación con el ID proporcionado")
     }
 };
+
+export const publicationExistsById = async (pid = '') => {
+    const exists = await Publication.findById(pid);
+    if (!exists) {
+        throw new Error(`No existe la publicación con el ID ${pid}`);
+    }
+};

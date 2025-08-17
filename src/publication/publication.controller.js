@@ -3,7 +3,19 @@ import { processPublicationHashtags, removePublicationFromHashtags } from '../he
 
 export const getPublications = async (req, res) => {
     try {
-        const publications = await Publication.find({ status: true })
+        const userId = req.user?._id;
+        const userRole = req.user?.role;
+
+        let filter = { status: true };
+
+        if (userRole !== 'ADMIN') {
+            filter.$or = [
+                { visibility: 'public' },
+                { user: userId } 
+            ];
+        }
+
+        const publications = await Publication.find(filter)
             .populate('user', 'username profilePicture')
             .populate('hashtags', 'name')
             .populate({
@@ -12,6 +24,14 @@ export const getPublications = async (req, res) => {
                 populate: {
                     path: 'user',
                     select: 'username profilePicture'
+                }
+            })
+            .populate({
+                path: 'reactions',
+                match: { status: true },
+                populate: {
+                    path: 'user',
+                    select: 'username'
                 }
             })
             .sort({ createdAt: -1 });
@@ -23,10 +43,44 @@ export const getPublications = async (req, res) => {
             });
         }
 
+        const publicationsWithReactionCount = publications.map(pub => {
+            const pubObj = pub.toObject();
+            const reactionCount = {
+                like: 0,
+                love: 0,
+                laugh: 0,
+                sad: 0,
+                angry: 0,
+                total: 0
+            };
+
+            if (pubObj.reactions) {
+                pubObj.reactions.forEach(reaction => {
+                    if (reaction.type && reactionCount.hasOwnProperty(reaction.type)) {
+                        reactionCount[reaction.type]++;
+                        reactionCount.total++;
+                    }
+                });
+            }
+
+            pubObj.reactionCount = reactionCount;
+            
+            let userReaction = null;
+            if (userId && pubObj.reactions) {
+                const userReactionObj = pubObj.reactions.find(r => 
+                    r.user && r.user._id.toString() === userId.toString()
+                );
+                userReaction = userReactionObj ? userReactionObj.type : null;
+            }
+            pubObj.userReaction = userReaction;
+
+            return pubObj;
+        });
+
         return res.status(200).json({
             success: true,
             message: 'Publicaciones obtenidas exitosamente',
-            publications
+            publications: publicationsWithReactionCount
         });
     } catch(err) {
         return res.status(500).json({
@@ -40,6 +94,8 @@ export const getPublications = async (req, res) => {
 export const getPublication = async (req, res) => {
     try {
         const { pid } = req.params;
+        const userId = req.user?._id;
+        const userRole = req.user?.role;
 
         const publication = await Publication.findById(pid)
             .populate('user', 'username profilePicture')
@@ -52,6 +108,14 @@ export const getPublication = async (req, res) => {
                     select: 'username profilePicture'
                 },
                 options: { sort: { createdAt: -1 } } 
+            })
+            .populate({
+                path: 'reactions',
+                match: { status: true },
+                populate: {
+                    path: 'user',
+                    select: 'username'
+                }
             });
 
         if(!publication) {
@@ -61,10 +125,47 @@ export const getPublication = async (req, res) => {
             });
         }
 
+        if (!publication.canBeViewedBy(userId, userRole)) {
+            return res.status(403).json({
+                success: false,
+                message: 'No tienes permisos para ver esta publicación'
+            });
+        }
+
+        const pubObj = publication.toObject();
+        const reactionCount = {
+            like: 0,
+            love: 0,
+            laugh: 0,
+            sad: 0,
+            angry: 0,
+            total: 0
+        };
+
+        if (pubObj.reactions) {
+            pubObj.reactions.forEach(reaction => {
+                if (reaction.type && reactionCount.hasOwnProperty(reaction.type)) {
+                    reactionCount[reaction.type]++;
+                    reactionCount.total++;
+                }
+            });
+        }
+
+        pubObj.reactionCount = reactionCount;
+        
+        let userReaction = null;
+        if (userId && pubObj.reactions) {
+            const userReactionObj = pubObj.reactions.find(r => 
+                r.user && r.user._id.toString() === userId.toString()
+            );
+            userReaction = userReactionObj ? userReactionObj.type : null;
+        }
+        pubObj.userReaction = userReaction;
+
         return res.status(200).json({
             success: true,
             message: 'Publicación obtenida exitosamente',
-            publication
+            publication: pubObj
         });
     } catch(err) {
         return res.status(500).json({
@@ -78,6 +179,13 @@ export const getPublication = async (req, res) => {
         const data = req.body;
         let media = req.file ? req.file.filename : null;
         data.media = media;
+
+        if (data.visibility && !['public', 'private'].includes(data.visibility)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Visibilidad inválida. Debe ser "public" o "private"'
+            });
+        }
 
         const publication = await Publication.create(data);
 
@@ -193,8 +301,17 @@ export const deletePublication = async (req, res) => {
 export const getPublicationsByUser = async (req, res) => {
     try {
         const { userId } = req.params;
+        const requestingUserId = req.user?._id;
+        const requestingUserRole = req.user?.role;
 
-        const publications = await Publication.find({ user: userId, status: true })
+        let filter = { user: userId, status: true };
+
+        if (requestingUserRole !== 'ADMIN' && 
+            (!requestingUserId || requestingUserId.toString() !== userId.toString())) {
+            filter.visibility = 'public';
+        }
+
+        const publications = await Publication.find(filter)
             .populate('user', 'username profilePicture')
             .populate('hashtags', 'name')
             .populate({
@@ -203,6 +320,14 @@ export const getPublicationsByUser = async (req, res) => {
                 populate: {
                     path: 'user',
                     select: 'username profilePicture'
+                }
+            })
+            .populate({
+                path: 'reactions',
+                match: { status: true },
+                populate: {
+                    path: 'user',
+                    select: 'username'
                 }
             })
             .sort({ createdAt: -1 });
@@ -214,10 +339,44 @@ export const getPublicationsByUser = async (req, res) => {
             });
         }
 
+        const publicationsWithReactionCount = publications.map(pub => {
+            const pubObj = pub.toObject();
+            const reactionCount = {
+                like: 0,
+                love: 0,
+                laugh: 0,
+                sad: 0,
+                angry: 0,
+                total: 0
+            };
+
+            if (pubObj.reactions) {
+                pubObj.reactions.forEach(reaction => {
+                    if (reaction.type && reactionCount.hasOwnProperty(reaction.type)) {
+                        reactionCount[reaction.type]++;
+                        reactionCount.total++;
+                    }
+                });
+            }
+
+            pubObj.reactionCount = reactionCount;
+            
+            let userReaction = null;
+            if (requestingUserId && pubObj.reactions) {
+                const userReactionObj = pubObj.reactions.find(r => 
+                    r.user && r.user._id.toString() === requestingUserId.toString()
+                );
+                userReaction = userReactionObj ? userReactionObj.type : null;
+            }
+            pubObj.userReaction = userReaction;
+
+            return pubObj;
+        });
+
         return res.status(200).json({
             success: true,
             message: 'Publicaciones del usuario obtenidas exitosamente',
-            publications
+            publications: publicationsWithReactionCount
         });
     } catch(err) {
         return res.status(500).json({
