@@ -1,0 +1,54 @@
+[{
+  "_id": {
+    "$oid": "68a176e420e01d8c3d052dd9"
+  },
+  "name": "graduandos",
+  "publications": [
+    {
+      "$oid": "68a176e420e01d8c3d052dd6"
+    }
+  ],
+  "status": true,
+  "createdAt": {
+    "$date": "2025-08-17T06:29:56.668Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-17T06:29:56.668Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68a176e420e01d8c3d052ddc"
+  },
+  "name": "adioskinal",
+  "publications": [
+    {
+      "$oid": "68a176e420e01d8c3d052dd6"
+    }
+  ],
+  "status": true,
+  "createdAt": {
+    "$date": "2025-08-17T06:29:56.674Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-17T06:29:56.674Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68a176e420e01d8c3d052ddf"
+  },
+  "name": "in6bm",
+  "publications": [
+    {
+      "$oid": "68a176e420e01d8c3d052dd6"
+    }
+  ],
+  "status": true,
+  "createdAt": {
+    "$date": "2025-08-17T06:29:56.678Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-17T06:29:56.678Z"
+  }
+}]

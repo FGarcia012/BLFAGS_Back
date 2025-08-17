@@ -20,7 +20,12 @@ const option = {
         ],
     },
     apis: [
-
+        './src/auth/auth.routes.js',
+        './src/user/user.routes.js',
+        './src/hashtag/hashtag.routes.js',
+        './src/comment/comment.routes.js',
+        './src/publication/publication.routes.js',
+        './src/reaction/reaction.routes.js'
     ]
 };
 

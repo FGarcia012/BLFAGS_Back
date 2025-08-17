@@ -1,0 +1,18 @@
+[{
+  "_id": {
+    "$oid": "68a176458b1e68d820e4d107"
+  },
+  "name": "Fredy Alexander García Sicajau",
+  "username": "FAGS",
+  "email": "alexander.garcia.sicajau@gmail.com",
+  "password": "$argon2id$v=19$m=65536,t=3,p=4$EGBWJQgquw4WcoFAL/T6LQ$7bDZazE5Wa1umLCftv20q/mOXogOoa7GCXcFCBV7B/U",
+  "profilePicture": "astronauta-1755412037796.jpg",
+  "role": "ADMIN",
+  "status": true,
+  "createdAt": {
+    "$date": "2025-08-17T06:27:17.953Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-17T06:27:17.953Z"
+  }
+}]

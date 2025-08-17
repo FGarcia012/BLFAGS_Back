@@ -5,8 +5,15 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
 import { dbConnection } from './mongo.js';
+import authRoutes from '../src/auth/auth.routes.js';
+import userRoutes from '../src/user/user.routes.js';
+import hashtagRoutes from '../src/hashtag/hashtag.routes.js';
+import commentRoutes from '../src/comment/comment.routes.js';
+import publicationRoutes from '../src/publication/publication.routes.js';
+import reactionRoutes from '../src/reaction/reaction.routes.js';
 import apiLimiter from '../src/middlewares/rate-limit-validator.js';
 import { swaggerDocs, swaggerUi } from './swagger.js';
+import { configureCloudinary } from '../src/middlewares/multer-uploads.js';
 
 const middlewares = (app) => {
     app.use(express.urlencoded({ extended: false }));
@@ -19,6 +26,12 @@ const middlewares = (app) => {
 
 const routes = (app) => {
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+    app.use('/BLFAGS/v1/auth', authRoutes);
+    app.use('/BLFAGS/v1/user', userRoutes);
+    app.use('/BLFAGS/v1/hashtag', hashtagRoutes);
+    app.use('/BLFAGS/v1/comment', commentRoutes);
+    app.use('/BLFAGS/v1/publication', publicationRoutes);
+    app.use('/BLFAGS/v1/reactions', reactionRoutes);
 };
 
 const conectarDB = async () => {
@@ -33,6 +46,7 @@ const conectarDB = async () => {
 export const initServer = async () => {
     const app = express()
     try{
+        configureCloudinary();
         middlewares(app)
         conectarDB()
         routes(app)

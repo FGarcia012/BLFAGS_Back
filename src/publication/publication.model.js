@@ -1,0 +1,85 @@
+import { model, Schema } from 'mongoose';
+
+const publicationSchema = Schema({
+    media: {
+        type: String
+    },
+    title: {
+        type: String,
+        required: [true, 'El título es obligatorio'],
+        trim: true
+    },
+    description: {
+        type: String,
+        required: [true, 'La descripción es obligatoria'],
+        trim: true
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: [true, 'El usuario es obligatorio']
+    },
+    hashtags: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Hashtag'
+    }],
+    comments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Comment'
+    }],
+    reactions: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Reaction'
+    }],
+    visibility: {
+        type: String,
+        enum: ['public', 'private'],
+        default: 'public'
+    },
+    status: {
+        type: Boolean,
+        default: true
+    }
+},
+{
+    versionKey: false,
+    timestamps: true
+});
+
+publicationSchema.virtual('stats').get(function() {
+    return {
+        reactions: this.reactions ? this.reactions.length : 0,
+        comments: this.comments ? this.comments.length : 0,
+        hashtags: this.hashtags ? this.hashtags.length : 0
+    };
+});
+
+publicationSchema.methods.canBeViewedBy = function(userId, userRole) {
+    if (userRole === 'ADMIN') return true;
+    
+    if (this.visibility === 'public') return true;
+    
+    if (this.visibility === 'private') {
+        return this.user.toString() === userId.toString();
+    }
+    
+    return false;
+};
+
+publicationSchema.methods.canBeEditedBy = function(userId, userRole) {
+    if (userRole === 'ADMIN') return true;
+    
+    return this.user.toString() === userId.toString();
+};
+
+publicationSchema.methods.canReactBy = function(userId, userRole) {
+    return this.canBeViewedBy(userId, userRole);
+};
+
+publicationSchema.methods.toJSON = function(){
+    const { __v, _id, ...publication } = this.toObject();
+    publication.pid = _id;
+    return publication;
+};
+
+export default model ('Publication', publicationSchema);
