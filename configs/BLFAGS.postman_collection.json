@@ -357,6 +357,754 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Hashtags",
+			"item": [
+				{
+					"name": "getHashtags",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/hashtag/getHashtags",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"hashtag",
+								"getHashtags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getHashtag",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/hashtag/getHashtag/68a1416614f6992a49b13db2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"hashtag",
+								"getHashtag",
+								"68a1416614f6992a49b13db2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addHashtag",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODlmZjljN2IxNDVjOWRkYjRlMDVkMjgiLCJpYXQiOjE3NTUzOTg0MjcsImV4cCI6MTc1NTQwMjAyN30.bhgGwpL0Ln7kgppKbgwsNlPfBs91tygYBQsOPqw9EMc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Esta vivo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/hashtag/addHashtag",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"hashtag",
+								"addHashtag"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteHashtag",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODlmZjljN2IxNDVjOWRkYjRlMDVkMjgiLCJpYXQiOjE3NTUzOTg0MjcsImV4cCI6MTc1NTQwMjAyN30.bhgGwpL0Ln7kgppKbgwsNlPfBs91tygYBQsOPqw9EMc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/hashtag/deleteHashtag/68a144e8868208f810fb026c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"hashtag",
+								"deleteHashtag",
+								"68a144e8868208f810fb026c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar hashtag por nombres",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/hashtag/search?query=box",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"hashtag",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "box"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar publicaciones con el hashtag",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/hashtag/publications/prueba",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"hashtag",
+								"publications",
+								"prueba"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comments",
+			"item": [
+				{
+					"name": "getComments",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/comment/getComments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"comment",
+								"getComments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getComment",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/comment/getComment/68a1397b14f6992a49b13d6c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"comment",
+								"getComment",
+								"68a1397b14f6992a49b13d6c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar comentarios de una publicacion",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/comment/publication/68a130cd3833d51edc988ac7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"comment",
+								"publication",
+								"68a130cd3833d51edc988ac7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addComment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2OGExNzY0NThiMWU2OGQ4MjBlNGQxMDciLCJpYXQiOjE3NTU0MTIwNzksImV4cCI6MTc1NTQxNTY3OX0.yY_Z_If8zWbAPXZNS7EkMDq9goSMAY18uVtdlcasztU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "text",
+									"value": "Fua ya pasaron varias semanas. ;(",
+									"type": "text"
+								},
+								{
+									"key": "media",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "user",
+									"value": "68a176458b1e68d820e4d107",
+									"type": "text"
+								},
+								{
+									"key": "publication",
+									"value": "68a176e420e01d8c3d052dd6",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/comment/addComment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"comment",
+								"addComment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteComment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODlmZjljN2IxNDVjOWRkYjRlMDVkMjgiLCJpYXQiOjE3NTUzOTg0MjcsImV4cCI6MTc1NTQwMjAyN30.bhgGwpL0Ln7kgppKbgwsNlPfBs91tygYBQsOPqw9EMc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/comment/deleteComment/68a1397b14f6992a49b13d6c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"comment",
+								"deleteComment",
+								"68a1397b14f6992a49b13d6c"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Publications",
+			"item": [
+				{
+					"name": "getPublications",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/publication/getPublications",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"publication",
+								"getPublications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPublication",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/publication/getPublication/68a130cd3833d51edc988ac7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"publication",
+								"getPublication",
+								"68a130cd3833d51edc988ac7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Publicaciones de un usuario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODlmZjljN2IxNDVjOWRkYjRlMDVkMjgiLCJpYXQiOjE3NTUzOTM3ODQsImV4cCI6MTc1NTM5NzM4NH0.Jnf0QgcgUOhydAUOmPImimXkHgXWVkUtHkK_JL0veOA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/publication/user/689ff9c7b145c9ddb4e05d28",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"publication",
+								"user",
+								"689ff9c7b145c9ddb4e05d28"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addPublication",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2OGExNzY0NThiMWU2OGQ4MjBlNGQxMDciLCJpYXQiOjE3NTU0MTIwNzksImV4cCI6MTc1NTQxNTY3OX0.yY_Z_If8zWbAPXZNS7EkMDq9goSMAY18uVtdlcasztU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "media",
+									"type": "file",
+									"src": "/C:/Users/alexa/OneDrive/Escritorio/Video de WhatsApp 2025-08-16 a las 19.29.39_23819c91.mp4"
+								},
+								{
+									"key": "title",
+									"value": "Dia de convivencia en kinal",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Ultimo dia que comparti con mis compañeros en kinal. #Graduandos #AdiosKinal #IN6BM",
+									"type": "text"
+								},
+								{
+									"key": "user",
+									"value": "68a176458b1e68d820e4d107",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/publication/addPublication",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"publication",
+								"addPublication"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updatePublication",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODlmZjljN2IxNDVjOWRkYjRlMDVkMjgiLCJpYXQiOjE3NTUzOTg0MjcsImV4cCI6MTc1NTQwMjAyN30.bhgGwpL0Ln7kgppKbgwsNlPfBs91tygYBQsOPqw9EMc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "media",
+									"type": "file",
+									"src": "/C:/Users/alexa/OneDrive/Escritorio/Video de WhatsApp 2025-08-16 a las 19.29.39_23819c91.mp4",
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": "Esto es una prueba",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Esto es una prueba #Prueba #PRUEBA #PRUEBAA #boxeo",
+									"type": "text"
+								},
+								{
+									"key": "user",
+									"value": "689ff9c7b145c9ddb4e05d28",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/publication/updatePublication/68a130cd3833d51edc988ac7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"publication",
+								"updatePublication",
+								"68a130cd3833d51edc988ac7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletePublication",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODlmZjljN2IxNDVjOWRkYjRlMDVkMjgiLCJpYXQiOjE3NTUzOTM3ODQsImV4cCI6MTc1NTM5NzM4NH0.Jnf0QgcgUOhydAUOmPImimXkHgXWVkUtHkK_JL0veOA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/publication/deletePublication/68a130cd3833d51edc988ac7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"publication",
+								"deletePublication",
+								"68a130cd3833d51edc988ac7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reaction",
+			"item": [
+				{
+					"name": "addOrUpdateReaction",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2OGExNzY0NThiMWU2OGQ4MjBlNGQxMDciLCJpYXQiOjE3NTU0MTIwNzksImV4cCI6MTc1NTQxNTY3OX0.yY_Z_If8zWbAPXZNS7EkMDq9goSMAY18uVtdlcasztU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": \"like\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/reactions/addOrUpdateReaction/68a176e420e01d8c3d052dd6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"reactions",
+								"addOrUpdateReaction",
+								"68a176e420e01d8c3d052dd6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "removeReaction",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2OGExNzY0NThiMWU2OGQ4MjBlNGQxMDciLCJpYXQiOjE3NTU0MTIwNzksImV4cCI6MTc1NTQxNTY3OX0.yY_Z_If8zWbAPXZNS7EkMDq9goSMAY18uVtdlcasztU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/reactions/removeReaction/68a176e420e01d8c3d052dd6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"reactions",
+								"removeReaction",
+								"68a176e420e01d8c3d052dd6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPublicationReactions",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/reactions/getPublicationReactions/68a176e420e01d8c3d052dd6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"reactions",
+								"getPublicationReactions",
+								"68a176e420e01d8c3d052dd6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserReaction",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2OGExNzY0NThiMWU2OGQ4MjBlNGQxMDciLCJpYXQiOjE3NTU0MTIwNzksImV4cCI6MTc1NTQxNTY3OX0.yY_Z_If8zWbAPXZNS7EkMDq9goSMAY18uVtdlcasztU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3020/BLFAGS/v1/reactions/getUserReaction/68a176e420e01d8c3d052dd6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"BLFAGS",
+								"v1",
+								"reactions",
+								"getUserReaction",
+								"68a176e420e01d8c3d052dd6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

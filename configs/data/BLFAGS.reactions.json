@@ -1,0 +1,19 @@
+[{
+  "_id": {
+    "$oid": "68a17b0920e01d8c3d052e48"
+  },
+  "user": {
+    "$oid": "68a176458b1e68d820e4d107"
+  },
+  "publication": {
+    "$oid": "68a176e420e01d8c3d052dd6"
+  },
+  "type": "like",
+  "status": true,
+  "createdAt": {
+    "$date": "2025-08-17T06:47:37.951Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-17T06:48:33.224Z"
+  }
+}]

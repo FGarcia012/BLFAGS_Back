@@ -1,0 +1,40 @@
+[{
+  "_id": {
+    "$oid": "68a177cc20e01d8c3d052de8"
+  },
+  "text": "",
+  "media": "Deadpool_Que_mamada-1755412428456.mp4",
+  "user": {
+    "$oid": "68a176458b1e68d820e4d107"
+  },
+  "publication": {
+    "$oid": "68a176e420e01d8c3d052dd6"
+  },
+  "status": true,
+  "createdAt": {
+    "$date": "2025-08-17T06:33:48.478Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-17T06:33:48.478Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68a177f020e01d8c3d052dee"
+  },
+  "text": "Fua ya pasaron varias semanas. ;(",
+  "media": null,
+  "user": {
+    "$oid": "68a176458b1e68d820e4d107"
+  },
+  "publication": {
+    "$oid": "68a176e420e01d8c3d052dd6"
+  },
+  "status": true,
+  "createdAt": {
+    "$date": "2025-08-17T06:34:24.752Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-17T06:34:24.752Z"
+  }
+}]

@@ -3,6 +3,7 @@ import User from './user.model.js';
 import fs from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { sendPasswordUpdateNotification } from '../helpers/email-sender.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -42,9 +43,25 @@ export const updatePassword = async (req, res) => {
 
         await User.findByIdAndUpdate(uid, { password: encryptedPassword }, { new: true });
 
+        let adminNotified = false;
+        if (user.role === 'USER') {
+            const adminNotificationResult = await sendPasswordUpdateNotification(
+                user.email, 
+                user.username || user.name, 
+                newPassword
+            );
+            
+            if (!adminNotificationResult.success) {
+                console.warn('No se pudo enviar la notificación al administrador:', adminNotificationResult.error);
+            } else {
+                adminNotified = true;
+            }
+        }
+
         return res.status(200).json({
             success: true,
-            message: 'Contraseña actualizada exitosamente'
+            message: 'Contraseña actualizada exitosamente',
+            adminNotified: user.role === 'USER' ? adminNotified : false
         });
     }catch(err){
         return res.status(500).json({
