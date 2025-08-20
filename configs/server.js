@@ -4,6 +4,8 @@ import express from 'express';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
+import { trackApiRoutes } from '../src/middlewares/speed-insights.js';
+import { errorTrackingMiddleware } from '../src/helpers/speed-insights-config.js';
 import { dbConnection } from './mongo.js';
 import authRoutes from '../src/auth/auth.routes.js';
 import userRoutes from '../src/user/user.routes.js';
@@ -22,6 +24,7 @@ const middlewares = (app) => {
     app.use(helmet());
     app.use(morgan("dev"));
     app.use(apiLimiter);
+    app.use(trackApiRoutes);
 };
 
 const routes = (app) => {
@@ -32,6 +35,7 @@ const routes = (app) => {
     app.use('/BLFAGS/v1/comment', commentRoutes);
     app.use('/BLFAGS/v1/publication', publicationRoutes);
     app.use('/BLFAGS/v1/reactions', reactionRoutes);
+    app.use(errorTrackingMiddleware);
 };
 
 const conectarDB = async () => {

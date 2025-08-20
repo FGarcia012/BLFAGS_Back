@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { register, login } from './auth.controller.js';
 import { registerValidator, loginValidator } from '../middlewares/user-validators.js';
 import { uploadProfilePicture } from '../middlewares/multer-uploads.js';
+import { trackAuth } from '../middlewares/speed-insights.js';
 
 const router = Router();
 
@@ -165,7 +166,7 @@ const router = Router();
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post("/register", uploadProfilePicture.single("profilePicture"), registerValidator, register);
+router.post("/register", trackAuth, uploadProfilePicture.single("profilePicture"), registerValidator, register);
 
 /**
  * @swagger
@@ -225,6 +226,6 @@ router.post("/register", uploadProfilePicture.single("profilePicture"), register
  *                   type: string
  *                   example: "Detalles del error"
  */
-router.post("/login", loginValidator, login);
+router.post("/login", trackAuth, loginValidator, login);
 
 export default router;
