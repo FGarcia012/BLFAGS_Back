@@ -5,6 +5,7 @@ import { deleteFileOnError } from './delete-file-on-error.js';
 import { handleErrors } from './handle-erros.js';
 import { validateJWT } from './validate-jwt.js';
 import { hasRoles } from './validate-roles.js';
+import { validateUserOwnership } from './validate-user-ownership.js'; 
 
 export const registerValidator = [
     body('name').notEmpty().withMessage('El nombre es de caracter obligatorio'),
@@ -37,6 +38,7 @@ export const updatePasswordValidator = [
     hasRoles('ADMIN', 'USER'),
     param('uid').isMongoId().withMessage('El ID de usuario no es válido'),
     param('uid').custom(userExists),
+    validateUserOwnership, 
     body('currentPassword').notEmpty().withMessage('La contraseña actual es obligatoria'),
     body('newPassword').isStrongPassword({
         minLength: 8,
@@ -54,6 +56,7 @@ export const updateUserValidator = [
     hasRoles('ADMIN', 'USER'),
     param('uid').isMongoId().withMessage('El ID de usuario no es válido'),
     param('uid').custom(userExists),
+    validateUserOwnership, 
     body('name').optional().isString().withMessage('El nombre es obligatorio'),
     body('username').optional().isString().withMessage('El nombre de usuario es obligatorio'),
     body('email').optional().isEmail().withMessage('El correo electrónico es obligatorio'),
@@ -66,6 +69,7 @@ export const updateProfilePictureValidator = [
     hasRoles('ADMIN', 'USER'),
     param('uid').isMongoId().withMessage('El ID de usuario no es válido'),
     param('uid').custom(userExists),
+    validateUserOwnership, 
     validateField,
     deleteFileOnError,
     handleErrors
@@ -73,9 +77,10 @@ export const updateProfilePictureValidator = [
 
 export const deleteUserValidator = [
     validateJWT,
-    hasRoles('ADMIN', 'USER'),
+    hasRoles('ADMIN', 'USER'), 
     param('uid').isMongoId().withMessage('El ID de usuario no es válido'),
     param('uid').custom(userExists),
+    validateUserOwnership,
     validateField,
     handleErrors
 ];
@@ -91,9 +96,10 @@ export const confirmDeleteUserValidator = [
 
 export const getUserValidator = [
     validateJWT,
-    hasRoles('ADMIN'),
+    hasRoles('ADMIN', 'USER'),
     param('uid').isMongoId().withMessage('El ID de usuario no es válido'),
     param('uid').custom(userExists),
+    validateUserOwnership,
     validateField,
     handleErrors
 ];
