@@ -75,10 +75,8 @@ export const login = async (req, res) => {
 
         return res.status(200).json({
             message: 'Login success',
-            userDetails: {
-                token: token,
-                profilePicture: user.profilePicture
-            }
+            userDetails: user.toJSON(),
+            token: token
         });
     } catch (err) {
         return res.status(500).json({
