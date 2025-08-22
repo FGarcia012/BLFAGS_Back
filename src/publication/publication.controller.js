@@ -5,14 +5,37 @@ export const getPublications = async (req, res) => {
     try {
         const userId = req.user?._id;
         const userRole = req.user?.role;
+        const { search } = req.query; 
 
         let filter = { status: true };
 
-        if (userRole !== 'ADMIN') {
-            filter.$or = [
-                { visibility: 'public' },
-                { user: userId } 
+        if (search && search.trim()) {
+            filter.$and = [
+                { status: true },
+                {
+                    $or: [
+                        { title: { $regex: search.trim(), $options: 'i' } },
+                        { description: { $regex: search.trim(), $options: 'i' } }
+                    ]
+                }
             ];
+            delete filter.status; 
+        }
+
+        if (userRole !== 'ADMIN') {
+            if (filter.$and) {
+                filter.$and.push({
+                    $or: [
+                        { visibility: 'public' },
+                        { user: userId }
+                    ]
+                });
+            } else {
+                filter.$or = [
+                    { visibility: 'public' },
+                    { user: userId }
+                ];
+            }
         }
 
         const publications = await Publication.find(filter)
@@ -37,9 +60,14 @@ export const getPublications = async (req, res) => {
             .sort({ createdAt: -1 });
 
         if(!publications || publications.length === 0) {
+            const message = search ? 
+                `No se encontraron publicaciones que coincidan con "${search}"` : 
+                'No se encontraron publicaciones';
+            
             return res.status(404).json({
                 success: false,
-                message: 'No se encontraron publicaciones'
+                message,
+                publications: []
             });
         }
 
@@ -79,8 +107,12 @@ export const getPublications = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message: 'Publicaciones obtenidas exitosamente',
-            publications: publicationsWithReactionCount
+            message: search ? 
+                `Se encontraron ${publicationsWithReactionCount.length} publicaciones para "${search}"` :
+                'Publicaciones obtenidas exitosamente',
+            publications: publicationsWithReactionCount,
+            searchTerm: search || null,
+            totalResults: publicationsWithReactionCount.length
         });
     } catch(err) {
         return res.status(500).json({

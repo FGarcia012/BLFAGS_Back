@@ -1,9 +1,9 @@
-import { body, param } from 'express-validator';
+import { body, param, query } from 'express-validator';
 import { userExists, publicationExists } from '../helpers/db-validators.js';
 import { validateField } from './validate-field.js';
 import { deleteFileOnError } from './delete-file-on-error.js';
 import { handleErrors } from './handle-erros.js';
-import { validateJWT } from './validate-jwt.js';
+import { validateJWT, optionalJWT } from './validate-jwt.js';
 import { hasRoles } from './validate-roles.js';
 import { validatePublicationOwnership } from './publication-visibility-validator.js';
 
@@ -67,6 +67,14 @@ export const getPublicationsByUserValidator = [
 ];
 
 export const getPublicationsValidator = [
+    optionalJWT,
+    query('search')
+        .optional()
+        .isString()
+        .withMessage('El término de búsqueda debe ser una cadena')
+        .trim()
+        .isLength({ max: 100 })
+        .withMessage('El término de búsqueda no puede exceder 100 caracteres'),
     validateField,
     handleErrors
 ];

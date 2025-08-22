@@ -44,3 +44,36 @@ export const validateJWT = async (req, res, next) => {
         });
     }
 };
+
+export const optionalJWT = async (req, res, next) => {
+    try {
+        const token = req.header('Authorization')?.replace('Bearer ', '');
+        
+        if (!token) {
+            req.user = null;
+            return next();
+        }
+
+        try {
+            const { uid } = jwt.verify(token, process.env.SECRETORPRIVATEKEY);
+            
+            const user = await User.findById(uid);
+            
+            if (!user || !user.status) {
+                req.user = null;
+                return next();
+            }
+            
+            req.user = user;
+            next();
+            
+        } catch (jwtError) {
+            req.user = null;
+            next();
+        }
+        
+    } catch (error) {
+        req.user = null;
+        next();
+    }
+};
