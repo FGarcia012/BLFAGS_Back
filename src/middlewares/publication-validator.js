@@ -59,6 +59,7 @@ export const getPublicationValidator = [
 ];
 
 export const getPublicationsByUserValidator = [
+    validateJWT,
     param('userId').isMongoId().withMessage('El ID del usuario debe ser un ObjectId válido'),
     param('userId').custom(userExists),
     validateField,

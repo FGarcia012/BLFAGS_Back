@@ -174,7 +174,9 @@ export const getPublication = async (req, res) => {
             error: err.message
         });
     }
-};export const addPublication = async (req, res) => {
+};
+
+export const addPublication = async (req, res) => {
     try {
         const data = req.body;
         let media = req.file ? req.file.path : null;
