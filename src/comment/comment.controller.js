@@ -4,7 +4,7 @@ import Publication from '../publication/publication.model.js';
 export const getComments = async (req, res) => {
     try {
         const comments = await Comment.find({ status: true })
-            .populate('user', 'username')
+            .populate('user', 'username profilePicture')
             .populate('publication', 'title');
 
         if(!comments || comments.length === 0) {
@@ -33,7 +33,7 @@ export const getComment = async (req, res) => {
         const { cid } = req.params;
 
         const comment = await Comment.findById(cid)
-            .populate('user', 'username')
+            .populate('user', 'username profilePicture')
             .populate('publication', 'title');
 
         if(!comment) {
@@ -61,8 +61,8 @@ export const getCommentsByPublication = async (req, res) => {
     try {
         const { pid } = req.params;
 
-        const comments = await Comment.find({ publication: pid })
-            .populate('user', 'username')
+        const comments = await Comment.find({ publication: pid, status: true })
+            .populate('user', 'username profilePicture')
             .sort({ createdAt: -1 });
 
         if(!comments || comments.length === 0) {
