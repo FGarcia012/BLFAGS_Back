@@ -11,6 +11,7 @@ import {
     addHashtagValidator,
     deleteHashtagValidator
 } from '../middlewares/hashtag-validator.js';
+import { optionalJWT } from '../middlewares/validate-jwt.js';
 
 const router = Router();
 
@@ -120,7 +121,7 @@ const router = Router();
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/getHashtags', getHashtags);
+router.get('/getHashtags', optionalJWT, getHashtags);
 
 /**
  * @swagger
@@ -173,7 +174,7 @@ router.get('/getHashtags', getHashtags);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/getHashtag/:hid', getHashtag);
+router.get('/getHashtag/:hid', optionalJWT, getHashtag);
 
 /**
  * @swagger
@@ -228,7 +229,7 @@ router.get('/getHashtag/:hid', getHashtag);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/search', searchHashtags);
+router.get('/search', optionalJWT, searchHashtags);
 
 /**
  * @swagger
@@ -287,7 +288,7 @@ router.get('/search', searchHashtags);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/publications/:name', getPublicationsByHashtag);
+router.get('/publications/:name', optionalJWT, getPublicationsByHashtag);
 
 /**
  * @swagger

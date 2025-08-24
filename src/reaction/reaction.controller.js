@@ -106,7 +106,7 @@ export const removeReaction = async (req, res) => {
             });
         }
 
-        await Reaction.findByIdAndUpdate(reaction._id, { status: false });
+        await Reaction.findByIdAndDelete(reaction._id);
 
         await Publication.findByIdAndUpdate(
             pid,

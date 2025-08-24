@@ -2,7 +2,7 @@ import { body, param } from 'express-validator';
 import { publicationExistsById } from '../helpers/db-validators.js';
 import { validateField } from './validate-field.js';
 import { handleErrors } from './handle-erros.js';
-import { validateJWT } from './validate-jwt.js';
+import { validateJWT, optionalJWT } from './validate-jwt.js';
 import { hasRoles } from './validate-roles.js';
 
 export const addOrUpdateReactionValidator = [
@@ -26,6 +26,7 @@ export const removeReactionValidator = [
 ];
 
 export const getPublicationReactionsValidator = [
+    optionalJWT,
     param('pid').isMongoId().withMessage('El ID de la publicación debe ser un ObjectId válido'),
     param('pid').custom(publicationExistsById),
     validateField,
