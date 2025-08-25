@@ -49,6 +49,7 @@ const conectarDB = async () => {
 
 export const initServer = async () => {
     const app = express()
+    app.set('trust proxy', 1);
     try{
         configureCloudinary();
         middlewares(app)
