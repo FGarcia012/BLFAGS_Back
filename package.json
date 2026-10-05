@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run --configLoader runner",
     "start": "node index.js",
-    "dev": "node --watch index.js"
+    "dev": "node --watch index.js",
+    "lint": "eslint .",
+    "build": "node scripts/check-syntax.js"
   },
   "keywords": [],
   "author": "Fredy Alexander García Sicajau",
@@ -13,23 +15,33 @@
   "description": "Backend for BLFAGS",
   "type": "module",
   "dependencies": {
-    "@vercel/speed-insights": "^1.2.0",
     "argon2": "^0.44.0",
-    "cloudinary": "^1.41.3",
+    "cloudinary": "2.11",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "express-rate-limit": "^8.0.1",
     "express-validator": "^7.2.1",
+    "file-type": "^20.5.0",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.18.0",
     "mongoose": "^8.17.1",
     "morgan": "^1.10.1",
     "multer": "^2.0.2",
-    "multer-storage-cloudinary": "^4.0.0",
-    "nodemailer": "^7.0.5",
+    "nodemailer": "^10.0.15",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "globals": "^17.13.0",
+    "mongodb-memory-server": "^11.3.0",
+    "supertest": "^7.3.1",
+    "vitest": "^3.2.7"
+  },
+  "engines": {
+    "node": ">=22.13.0 <25"
   }
 }

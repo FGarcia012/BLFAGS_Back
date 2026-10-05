@@ -41,4 +41,6 @@ commentSchema.methods.toJSON = function(){
     return comment;
 };
 
+commentSchema.index({publication:1,status:1,createdAt:-1,_id:-1});
+commentSchema.index({user:1});
 export default model('Comment', commentSchema);

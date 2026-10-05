@@ -1,150 +1,41 @@
 import Comment from './comment.model.js';
 import Publication from '../publication/publication.model.js';
-
-export const getComments = async (req, res) => {
-    try {
-        const comments = await Comment.find({ status: true })
-            .populate('user', 'username profilePicture')
-            .populate('publication', 'title');
-
-        if(!comments || comments.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'No se encontraron comentarios'
-            });
-        }
-
-        return res.status(200).json({
-            success: true,
-            message: 'Comentarios obtenidos exitosamente',
-            comments
-        });
-    }catch(err){
-        return res.status(500).json({
-            success: false,
-            message: 'Error al obtener los comentarios',
-            error: err.message
-        });
-    }
+import {fail,sameId,pagination,pageResult} from '../helpers/privacy.js';
+import {destroyAsset} from '../middlewares/multer-uploads.js';
+const dto = (comment,user) => ({...comment,cid:comment._id,isMine:sameId(comment.user,user?._id)});
+export const getComments = async (req,res) => {
+ const {limit,cursorFilter} = pagination(req.query);
+ // Incluso el administrador recibe solo comentarios de publicaciones públicas.
+ const comments = await Comment.aggregate([{$match:{$and:[{status:true},cursorFilter]}},{$lookup:{from:'publications',localField:'publication',foreignField:'_id',as:'parent'}},{$match:{'parent.status':true,'parent.visibility':'public'}},{$sort:{createdAt:-1,_id:-1}},{$limit:limit+1},{$project:{text:1,createdAt:1,publication:1}}]);
+ const {rows,...page} = pageResult(comments,limit); res.json({success:true,comments:rows,...page});
 };
-
-export const getComment = async (req, res) => {
-    try {
-        const { cid } = req.params;
-
-        const comment = await Comment.findById(cid)
-            .populate('user', 'username profilePicture')
-            .populate('publication', 'title');
-
-        if(!comment) {
-            return res.status(404).json({
-                success: false,
-                message: 'Comentario no encontrado'
-            });
-        }
-
-        return res.status(200).json({
-            success: true,
-            message: 'Comentario obtenido exitosamente',
-            comment
-        });
-    }catch(err){
-        return res.status(500).json({
-            success: false,
-            message: 'Error al obtener el comentario',
-            error: err.message
-        });
-    }
+export const getComment = async (req,res) => {
+ const comment = await Comment.findOne({_id:req.params.cid,status:true}).populate('user','username profilePicture').lean();
+ if (!comment) throw fail(404,'Comentario no encontrado');
+ const publication = await Publication.findById(comment.publication);
+ if (!publication?.canBeViewedBy(req.user?._id)) throw fail(404,'Comentario no encontrado');
+ res.json({success:true,comment:dto(comment,req.user)});
 };
-
-export const getCommentsByPublication = async (req, res) => {
-    try {
-        const { pid } = req.params;
-
-        const comments = await Comment.find({ publication: pid, status: true })
-            .populate('user', 'username profilePicture')
-            .sort({ createdAt: -1 });
-
-        if(!comments || comments.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'No se encontraron comentarios para esta publicación'
-            });
-        }
-
-        return res.status(200).json({
-            success: true,
-            message: 'Comentarios de la publicación obtenidos exitosamente',
-            comments
-        });
-    }catch(err){
-        return res.status(500).json({
-            success: false,
-            message: 'Error al obtener los comentarios de la publicación',
-            error: err.message
-        });
-    }
+export const getCommentsByPublication = async (req,res) => {
+ const {limit,cursorFilter} = pagination(req.query);
+ const comments = await Comment.find({$and:[{publication:req.publication.id,status:true},cursorFilter]}).populate('user','username profilePicture').sort({createdAt:-1,_id:-1}).limit(limit+1).lean();
+ const {rows,...page} = pageResult(comments,limit); res.json({success:true,comments:rows.map(row => dto(row,req.user)),...page});
 };
-
-export const addComment = async (req, res) => {
-    try {
-        const data = req.body;
-        let media = req.file ? req.file.path : null;
-        data.media = media;
-
-        const comment = await Comment.create(data);
-
-        await Publication.findByIdAndUpdate(
-            data.publication,
-            { $push: { comments: comment._id } },
-            { new: true }
-        );
-
-        return res.status(201).json({
-            success: true,
-            message: 'Comentario agregado exitosamente',
-            comment
-        });
-    }catch(err){
-        return res.status(500).json({
-            success: false,
-            message: 'Error al intentar agregar el comentario',
-            error: err.message
-        });
-    }
+export const addComment = async (req,res) => {
+ const comment = await Comment.create({text:req.body.text,publication:req.publication.id,user:req.user._id,media:req.file?.path || null});
+ await Publication.updateOne({_id:req.publication.id},{$addToSet:{comments:comment._id}});
+ await comment.populate('user','username profilePicture');
+ const commentCount = await Comment.countDocuments({publication:req.publication.id,status:true});
+ res.status(201).json({success:true,message:'Comentario agregado',comment:dto(comment.toObject(),req.user),commentCount});
 };
-
-export const deleteComment = async (req, res) => {
-    try {
-        const { cid } = req.params;
-
-        const commentToDelete = await Comment.findById(cid);
-        
-        if(!commentToDelete) {
-            return res.status(404).json({
-                success: false,
-                message: 'Comentario no encontrado'
-            });
-        }
-
-        const comment = await Comment.findByIdAndUpdate(cid, { status: false }, { new: true });
-
-        await Publication.findByIdAndUpdate(
-            commentToDelete.publication,
-            { $pull: { comments: cid } },
-            { new: true }
-        );
-
-        return res.status(200).json({
-            success: true,
-            message: 'Comentario eliminado exitosamente',
-            comment
-        });
-    }catch(err){
-        return res.status(500).json({
-            success: false,
-            message: 'Error al intentar eliminar el comentario',
-            error: err.message
-        });
-    }
+export const deleteComment = async (req,res) => {
+ const comment = await Comment.findOne({_id:req.params.cid,status:true});
+ if (!comment) throw fail(404,'Comentario no encontrado');
+ if (!sameId(comment.user,req.user._id) && req.user.role !== 'ADMIN') throw fail(403,'No puedes borrar comentarios ajenos');
+ const publication = await Publication.findById(comment.publication);
+ if (!publication?.canBeViewedBy(req.user._id)) throw fail(404,'Comentario no encontrado');
+ await destroyAsset(comment.media); comment.status = false; comment.media = null; await comment.save();
+ await Publication.updateOne({_id:comment.publication},{$pull:{comments:comment.id}});
+ const commentCount = await Comment.countDocuments({publication:comment.publication,status:true});
+ res.json({success:true,message:'Comentario eliminado',cid:comment.id,publication:comment.publication,commentCount});
 };

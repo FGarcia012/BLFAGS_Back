@@ -1,70 +1,10 @@
 import Reaction from '../reaction/reaction.model.js';
-
-export const getReactionStats = async (publicationId) => {
-    try {
-        const reactions = await Reaction.find({
-            publication: publicationId,
-            status: true
-        });
-
-        const stats = {
-            like: 0,
-            love: 0,
-            laugh: 0,
-            sad: 0,
-            angry: 0,
-            total: 0
-        };
-
-        reactions.forEach(reaction => {
-            if (stats.hasOwnProperty(reaction.type)) {
-                stats[reaction.type]++;
-                stats.total++;
-            }
-        });
-
-        return stats;
-    } catch (error) {
-        console.error('Error al obtener estadísticas de reacciones:', error);
-        return {
-            like: 0,
-            love: 0,
-            laugh: 0,
-            sad: 0,
-            angry: 0,
-            total: 0
-        };
-    }
+import mongoose from 'mongoose';
+export const reactionTypes = ['like','love','laugh','sad','angry'];
+export const emptyCounts = () => ({like:0,love:0,laugh:0,sad:0,angry:0,total:0});
+export const isValidReactionType = type => reactionTypes.includes(type);
+export const getReactionStats = async publicationId => {
+ const rows = await Reaction.aggregate([{$match:{publication:new mongoose.Types.ObjectId(String(publicationId)),status:true}},{$group:{_id:'$type',count:{$sum:1}}}]);
+ const counts = emptyCounts(); for (const row of rows) if (reactionTypes.includes(row._id)) {counts[row._id] = row.count; counts.total += row.count;} return counts;
 };
-
-export const getUserReactionForPublication = async (publicationId, userId) => {
-    try {
-        return await Reaction.findOne({
-            publication: publicationId,
-            user: userId,
-            status: true
-        }).populate('user', 'username name');
-    } catch (error) {
-        console.error('Error al obtener reacción del usuario:', error);
-        return null;
-    }
-};
-
-export const isValidReactionType = (type) => {
-    const validTypes = ['like', 'love', 'laugh', 'sad', 'angry'];
-    return validTypes.includes(type);
-};
-
-export const getPublicationReactionsWithUsers = async (publicationId) => {
-    try {
-        return await Reaction.find({
-            publication: publicationId,
-            status: true
-        })
-        .populate('user', 'username name')
-        .sort({ createdAt: -1 });
-    } catch (error) {
-        console.error('Error al obtener reacciones con usuarios:', error);
-        return [];
-    }
-};
+export const getUserReactionForPublication = (publication,user) => Reaction.findOne({publication,user,status:true}).select('type -_id').lean();

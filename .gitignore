@@ -1,4 +1,9 @@
 node_modules/
-
-package-lock.json
-.vercel
+.env
+.env.*
+!.env.example
+configs/data/
+public/uploads/
+*.log
+coverage/
+.vercel/

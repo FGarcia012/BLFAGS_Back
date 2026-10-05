@@ -54,28 +54,11 @@ publicationSchema.virtual('stats').get(function() {
     };
 });
 
-publicationSchema.methods.canBeViewedBy = function(userId, userRole) {
-    if (userRole === 'ADMIN') return true;
-    
-    if (this.visibility === 'public') return true;
-    
-    if (this.visibility === 'private') {
-        return this.user.toString() === userId.toString();
-    }
-    
-    return false;
-};
-
-publicationSchema.methods.canBeEditedBy = function(userId, userRole) {
-    if (userRole === 'ADMIN') return true;
-    
-    return this.user.toString() === userId.toString();
-};
-
-publicationSchema.methods.canReactBy = function(userId, userRole) {
-    return this.canBeViewedBy(userId, userRole);
-};
-
+publicationSchema.methods.canBeViewedBy = function(userId) { return this.status && (this.visibility === 'public' || Boolean(userId && String(this.user._id || this.user) === String(userId))); };
+publicationSchema.methods.canBeEditedBy = function(userId,role) { return role === 'ADMIN' || Boolean(userId && String(this.user._id || this.user) === String(userId)); };
+publicationSchema.methods.canReactBy = function(userId) { return this.canBeViewedBy(userId); };
+publicationSchema.index({status:1,visibility:1,createdAt:-1,_id:-1});
+publicationSchema.index({user:1,status:1,createdAt:-1,_id:-1});
 publicationSchema.methods.toJSON = function(){
     const { __v, _id, ...publication } = this.toObject();
     publication.pid = _id;

@@ -1,79 +1,15 @@
 import jwt from 'jsonwebtoken';
 import User from '../user/user.model.js';
-
-export const validateJWT = async (req, res, next) => {
-    try {
-        let token = (req.body && req.body.token) || req.query.token || req.headers['authorization'];
-
-        if (!token) {
-            return res.status(400).json({
-                success: false,
-                message: 'No existe token en la petición'
-            });
-        }
-
-        token = token.replace(/^Bearer\s+/, "");
-
-        const { uid } = jwt.verify(token, process.env.SECRETORPRIVATEKEY);
-        console.log(`Token uid: ${uid}`);
-
-        const user = await User.findById(uid);
-        console.log(`User found: ${user}`);
-
-        if (!user) {
-            return res.status(400).json({
-                success: false,
-                message: 'El usuario no existe en la base de datos'
-            });
-        }
-
-        if (!user.status) {
-            return res.status(400).json({
-                success: false,
-                message: 'Usuario desactivado previamente'
-            });
-        }
-
-        req.user = user;
-        next();
-    }catch(err){
-        return res.status(500).json({
-            success: false,
-            message: 'Error al validar el token',
-            error: err.message
-        });
-    }
+const unauthorized = res => res.status(401).json({success:false,message:'Sesión inválida o expirada'});
+export const validateJWT = async (req,res,next) => {
+ const match = /^Bearer ([^\s]+)$/.exec(req.get('Authorization') || '');
+ if (!match) return unauthorized(res);
+ let uid; try { ({uid} = jwt.verify(match[1],process.env.SECRETORPRIVATEKEY,{algorithms:['HS256']})); } catch { return unauthorized(res); }
+ try {
+  if (typeof uid !== 'string' || !/^[a-f\d]{24}$/i.test(uid)) return unauthorized(res);
+  const user = await User.findById(uid).select('_id username role status profilePicture');
+  if (!user?.status) return unauthorized(res);
+  req.user = user; next();
+ } catch(err) { next(err); }
 };
-
-export const optionalJWT = async (req, res, next) => {
-    try {
-        const token = req.header('Authorization')?.replace('Bearer ', '');
-        
-        if (!token) {
-            req.user = null;
-            return next();
-        }
-
-        try {
-            const { uid } = jwt.verify(token, process.env.SECRETORPRIVATEKEY);
-            
-            const user = await User.findById(uid);
-            
-            if (!user || !user.status) {
-                req.user = null;
-                return next();
-            }
-            
-            req.user = user;
-            next();
-            
-        } catch (jwtError) {
-            req.user = null;
-            next();
-        }
-        
-    } catch (error) {
-        req.user = null;
-        next();
-    }
-};
+export const optionalJWT = (req,res,next) => req.get('Authorization') ? validateJWT(req,res,next):next();
