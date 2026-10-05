@@ -16,7 +16,7 @@
   "description": "Backend for BLFAGS",
   "type": "module",
   "dependencies": {
-    "argon2": "^0.44.0",
+    "argon2": "^0.45.1",
     "cloudinary": "2.11",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
