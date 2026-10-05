@@ -1,0 +1,890 @@
+{
+  "info": {
+    "name": "BLFAGS — contrato seguro",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3020/BLFAGS/v1"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Crear una cuenta USER y enviar una sola bienvenida",
+      "request": {
+        "method": "POST",
+        "auth": {
+          "type": "noauth"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/register",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "register"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{username}}\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Iniciar sesión sin revelar si existe una cuenta",
+      "request": {
+        "method": "POST",
+        "auth": {
+          "type": "noauth"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "updatePassword",
+      "request": {
+        "method": "PUT",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/user/updatePassword/{{uid}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "user",
+            "updatePassword",
+            "{uid}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"currentPassword\": \"{{currentPassword}}\",\n  \"newPassword\": \"{{newPassword}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "updateUser",
+      "request": {
+        "method": "PUT",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/user/updateUser/{{uid}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "user",
+            "updateUser",
+            "{uid}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{username}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "updateProfilePicture",
+      "request": {
+        "method": "PATCH",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/user/updateProfilePicture/{{uid}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "user",
+            "updateProfilePicture",
+            "{uid}"
+          ]
+        },
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "profilePicture",
+              "type": "file",
+              "src": [],
+              "disabled": false
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "deleteUser",
+      "request": {
+        "method": "DELETE",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/user/deleteUser/{{uid}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "user",
+            "deleteUser",
+            "{uid}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"confirm\": \"Si\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Perfil público; correo únicamente para su propietario",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "noauth"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/user/getUser/{{uid}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "user",
+            "getUser",
+            "{uid}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Hasta 100 aliases y metadatos de moderación, sin datos personales",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/user/getUsers",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "user",
+            "getUsers"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Feed por cursor con conteos e isMine; sin listas de comentarios ni reacciones",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "noauth"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/publication/getPublications?limit=20",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "publication",
+            "getPublications"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Leer una publicación visible",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "noauth"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/publication/getPublication/{{pid}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "publication",
+            "getPublication",
+            "{pid}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Publicaciones visibles de un usuario, por cursor",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/publication/user/{{userId}}?limit=20",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "publication",
+            "user",
+            "{userId}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "addPublication",
+      "request": {
+        "method": "POST",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/publication/addPublication",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "publication",
+            "addPublication"
+          ]
+        },
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "title",
+              "value": "{{title}}",
+              "type": "text"
+            },
+            {
+              "key": "description",
+              "value": "{{description}}",
+              "type": "text"
+            },
+            {
+              "key": "visibility",
+              "value": "public",
+              "type": "text"
+            },
+            {
+              "key": "media",
+              "type": "file",
+              "src": [],
+              "disabled": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "updatePublication",
+      "request": {
+        "method": "PUT",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/publication/updatePublication/{{pid}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "publication",
+            "updatePublication",
+            "{pid}"
+          ]
+        },
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "title",
+              "value": "{{title}}",
+              "type": "text"
+            },
+            {
+              "key": "description",
+              "value": "{{description}}",
+              "type": "text"
+            },
+            {
+              "key": "visibility",
+              "value": "public",
+              "type": "text"
+            },
+            {
+              "key": "media",
+              "type": "file",
+              "src": [],
+              "disabled": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "deletePublication",
+      "request": {
+        "method": "DELETE",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/publication/deletePublication/{{pid}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "publication",
+            "deletePublication",
+            "{pid}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "getComments",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/comment/getComments?limit=20",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "comment",
+            "getComments"
+          ]
+        }
+      }
+    },
+    {
+      "name": "getComment",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "noauth"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/comment/getComment/{{cid}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "comment",
+            "getComment",
+            "{cid}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Comentarios visibles por cursor",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "noauth"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/comment/publication/{{pid}}?limit=20",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "comment",
+            "publication",
+            "{pid}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "addComment",
+      "request": {
+        "method": "POST",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/comment/addComment",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "comment",
+            "addComment"
+          ]
+        },
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "publication",
+              "value": "{{pid}}",
+              "type": "text"
+            },
+            {
+              "key": "text",
+              "value": "{{text}}",
+              "type": "text"
+            },
+            {
+              "key": "media",
+              "type": "file",
+              "src": [],
+              "disabled": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "deleteComment",
+      "request": {
+        "method": "DELETE",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/comment/deleteComment/{{cid}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "comment",
+            "deleteComment",
+            "{cid}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "addOrUpdateReaction",
+      "request": {
+        "method": "POST",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/reactions/addOrUpdateReaction/{{pid}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "reactions",
+            "addOrUpdateReaction",
+            "{pid}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"like\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "removeReaction",
+      "request": {
+        "method": "DELETE",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/reactions/removeReaction/{{pid}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "reactions",
+            "removeReaction",
+            "{pid}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Conteos y reacción propia; sin identidades",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "noauth"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/reactions/getPublicationReactions/{{pid}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "reactions",
+            "getPublicationReactions",
+            "{pid}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Solo el tipo de reacción propia",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/reactions/getUserReaction/{{pid}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "reactions",
+            "getUserReaction",
+            "{pid}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "getHashtags",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "noauth"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/hashtag/getHashtags",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "hashtag",
+            "getHashtags"
+          ]
+        }
+      }
+    },
+    {
+      "name": "getHashtag",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "noauth"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/hashtag/getHashtag/{{hid}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "hashtag",
+            "getHashtag",
+            "{hid}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "searchHashtags",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "noauth"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/hashtag/search?query={{query}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "hashtag",
+            "search"
+          ]
+        }
+      }
+    },
+    {
+      "name": "getPublicationsByHashtag",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "noauth"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/hashtag/publications/{{name}}?limit=20",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "hashtag",
+            "publications",
+            "{name}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "addHashtag",
+      "request": {
+        "method": "POST",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/hashtag/addHashtag",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "hashtag",
+            "addHashtag"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"{{hashtag}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "deleteHashtag",
+      "request": {
+        "method": "DELETE",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/hashtag/deleteHashtag/{{hid}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "hashtag",
+            "deleteHashtag",
+            "{hid}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

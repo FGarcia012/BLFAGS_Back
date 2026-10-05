@@ -7,7 +7,8 @@
     "start": "node index.js",
     "dev": "node --watch index.js",
     "lint": "eslint .",
-    "build": "node scripts/check-syntax.js"
+    "build": "node scripts/check-syntax.js",
+    "contract": "node scripts/generate-contract.js"
   },
   "keywords": [],
   "author": "Fredy Alexander García Sicajau",
@@ -22,7 +23,7 @@
     "express": "^5.1.0",
     "express-rate-limit": "^8.0.1",
     "express-validator": "^7.2.1",
-    "file-type": "^20.5.0",
+    "file-type": "^22.1.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.18.0",
@@ -30,7 +31,6 @@
     "morgan": "^1.10.1",
     "multer": "^2.0.2",
     "nodemailer": "^10.0.15",
-    "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {

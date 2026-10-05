@@ -11,7 +11,7 @@ export const uploadPublications = upload(false);
 export const uploadComments = upload(false);
 export async function storeUpload(req,_res,next) {
  if (!req.file) return next();
- const type = await fileTypeFromBuffer(req.file.buffer);
+ const type = await fileTypeFromBuffer(req.file.buffer).catch(() => null);
  const image = ['image/jpeg','image/png','image/webp','image/gif'].includes(type?.mime),video = ['video/mp4','video/quicktime','video/webm'].includes(type?.mime);
  if ((!image && !video) || (req.file.fieldname === 'profilePicture' && !image)) throw fail(400,'Tipo de archivo no permitido');
  if (req.file.size > mb(image ? 'image':'video')) throw fail(413,'El archivo supera el límite permitido');

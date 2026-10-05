@@ -14,7 +14,7 @@ export const getPublication = async (req,res) => {
 export const addPublication = async (req,res) => {
  const {title,description,visibility} = req.body;
  const publication = await Publication.create({title,description,visibility,user:req.user._id,media:req.file?.path || null});
- publication.hashtags = await processPublicationHashtags(description,publication._id); await publication.save();
+ publication.hashtags = await processPublicationHashtags(description,publication._id); await publication.save(); if (req.file) req.file.asset = null;
  res.status(201).json({success:true,message:'Publicación creada',publication});
 };
 export const updatePublication = async (req,res) => {
@@ -22,7 +22,7 @@ export const updatePublication = async (req,res) => {
  for (const key of ['title','description','visibility']) if (req.body[key] !== undefined) publication[key] = req.body[key];
  if (req.file) publication.media = req.file.path;
  if (req.body.description !== undefined) publication.hashtags = await processPublicationHashtags(publication.description,publication.id,publication.hashtags);
- await publication.save();
+ await publication.save(); if (req.file) req.file.asset = null;
  if (req.file && previousMedia) await destroyAsset(previousMedia);
  res.json({success:true,message:'Publicación actualizada',publication});
 };

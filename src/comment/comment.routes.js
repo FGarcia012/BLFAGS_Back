@@ -10,6 +10,6 @@ const router = Router();
 router.get('/getComments',validateJWT,hasRoles('ADMIN'),getComments);
 router.get('/getComment/:cid',optionalJWT,id('cid'),validate,getComment);
 router.get('/publication/:pid',optionalJWT,id('pid'),validate,loadPublication,getCommentsByPublication);
-router.post('/addComment',validateJWT,hasRoles('USER','ADMIN'),writeLimiter,uploadLimiter,uploadComments.single('media'),rejectUnsafeKeys,body('publication').isMongoId(),body('text').optional().isString().bail().isLength({max:500}),validate,loadPublication,storeUpload,addComment);
+router.post('/addComment',validateJWT,hasRoles('USER','ADMIN'),writeLimiter,uploadLimiter,uploadComments.single('media'),rejectUnsafeKeys,body('publication').isMongoId(),body('text').optional().isString().bail().isLength({max:500}),body().custom((data,{req}) => Boolean(data.text?.trim() || req.file)),validate,loadPublication,storeUpload,addComment);
 router.delete('/deleteComment/:cid',validateJWT,hasRoles('USER','ADMIN'),writeLimiter,id('cid'),validate,deleteComment);
 export default router;

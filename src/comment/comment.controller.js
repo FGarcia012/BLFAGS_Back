@@ -24,6 +24,7 @@ export const getCommentsByPublication = async (req,res) => {
 export const addComment = async (req,res) => {
  const comment = await Comment.create({text:req.body.text,publication:req.publication.id,user:req.user._id,media:req.file?.path || null});
  await Publication.updateOne({_id:req.publication.id},{$addToSet:{comments:comment._id}});
+ if (req.file) req.file.asset = null;
  await comment.populate('user','username profilePicture');
  const commentCount = await Comment.countDocuments({publication:req.publication.id,status:true});
  res.status(201).json({success:true,message:'Comentario agregado',comment:dto(comment.toObject(),req.user),commentCount});

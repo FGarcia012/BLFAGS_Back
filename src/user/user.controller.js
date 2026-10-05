@@ -22,7 +22,7 @@ export const updateUser = async (req,res) => {
 export const updateProfilePicture = async (req,res) => {
  if (!req.file) throw fail(400,'Selecciona una imagen');
  const user = await User.findOne({_id:req.params.uid,status:true}); if (!user) throw fail(404,'Usuario no encontrado');
- const previous = user.profilePicture; user.profilePicture = req.file.path; await user.save(); await destroyAsset(previous);
+ const previous = user.profilePicture; user.profilePicture = req.file.path; await user.save(); req.file.asset = null; await destroyAsset(previous);
  res.json({success:true,message:'Foto actualizada',user:publicUser(user)});
 };
 export const deleteUser = async (req,res) => {

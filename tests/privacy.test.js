@@ -75,4 +75,29 @@ describe('Privacidad y permisos reales con MongoDB aislado', () => {
   it('hashtags no revelan títulos privados', async () => {
     for (const viewer of [null,b]) for (const path of ['/hashtag/getHashtags',`/hashtag/getHashtag/${tag.id}`,'/hashtag/search?query=reservado','/hashtag/publications/reservado']) { const r = await get(path,viewer); expect(JSON.stringify(r.body)).not.toContain('Privado'); }
   });
+  it('ignora el autor enviado al crear publicaciones y comentarios',async()=>{
+    const created=await request(app).post(prefix+'/publication/addPublication').set('Authorization',`Bearer ${token(b)}`).send({title:'Autor real de sesión',description:'Ficticio',user:a.id});
+    expect(created.status).toBe(201);expect(String((await Publication.findById(created.body.publication.pid)).user)).toBe(b.id);
+    const comment=await request(app).post(prefix+'/comment/addComment').set('Authorization',`Bearer ${token(b)}`).send({publication:publicPost.id,text:'Ficticio',user:a.id});
+    expect(comment.status).toBe(201);expect(comment.body.comment.isMine).toBe(true);expect(comment.body.comment.user.username).toBe(b.username);
+  });
+  it('no acepta tokens en query o body, ni firmas inválidas',async()=>{
+    expect((await request(app).post(prefix+'/publication/addPublication?token='+token(a)).send({token:token(a)})).status).toBe(401);
+    expect((await get('/publication/getPublications').set('Authorization','Bearer invalid-token-ficticio')).status).toBe(401);
+  });
+  it('solo el dueño recibe su correo',async()=>{
+    const own=await get(`/user/getUser/${a.id}`,a);expect(own.body.user.email).toBe('alpha@example.invalid');
+    for(const viewer of [null,b,admin]) expect((await get(`/user/getUser/${a.id}`,viewer)).body.user.email).toBeUndefined();
+  });
+  it('las reacciones concurrentes no crean duplicados',async()=>{
+    const responses=await Promise.all(Array.from({length:3},()=>request(app).post(prefix+`/reactions/addOrUpdateReaction/${publicPost.id}`).set('Authorization',`Bearer ${token(b)}`).send({type:'love'})));
+    responses.forEach(response=>expect(response.status).toBe(200));expect(await Reaction.countDocuments({publication:publicPost.id,user:b.id})).toBe(1);
+  });
+  it('las búsquedas son literales y los cursores inválidos responden 400',async()=>{
+    const search=await get('/publication/getPublications?search='+encodeURIComponent('.*'));expect(search.status).toBe(200);expect(search.body.publications).toEqual([]);
+    expect((await get('/publication/getPublications?cursor=incorrecto')).status).toBe(400);
+  });
+  it('rechaza inyección en campos y no expone detalles de errores',async()=>{
+    const response=await request(app).post(prefix+'/auth/login').send({username:{$ne:null},password:'Ficticia!123'});expect(response.status).toBe(400);expect(response.body.error).toBeUndefined();
+  });
 });

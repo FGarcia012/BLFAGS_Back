@@ -6,4 +6,5 @@ configs/data/
 public/uploads/
 *.log
 coverage/
+tests/results/
 .vercel/
